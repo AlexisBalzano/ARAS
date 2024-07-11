@@ -1,0 +1,186 @@
+body {
+    background: #A4A4A4;
+    background: -moz-linear-gradient(left, #A4A4A4 0%, #FFFFFF 35%, #757575 100%);
+    background: -webkit-linear-gradient(left, #A4A4A4 0%, #FFFFFF 35%, #757575 100%);
+    background: linear-gradient(to right, #A4A4A4 0%, #FFFFFF 35%, #757575 100%);
+    cursor: default;
+}
+
+h1 {
+    color: black;
+    text-align: center;
+    font-weight: bolder;
+    margin-top: 60px;
+}
+
+
+h2 {
+    color: black;
+    margin-right: 10%;
+}
+
+#status {
+    margin-left: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.statusIndicators {
+    margin: auto 5%;
+}
+
+#FIRbuttonBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+#rwydata {
+    color: red;
+}
+
+#config {
+    color: red;
+}
+
+#tokenStatus {
+    color: red;
+}
+
+.about {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#rwyFile {
+    position: fixed;
+    z-index: -1;
+    top: -4px;
+    left: 68px;
+    font-size: 15px;
+    color: black;
+}
+
+.button-wrap {
+    position: fixed;
+}
+
+.button {
+    background-color: rgb(78, 148, 214);
+    color: aliceblue;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: 7px;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: yellow;
+    color: black;
+}
+
+#path {
+    position: fixed;
+    top: 0px;
+    left: 160px;
+    display: none;
+    font-size: 10px;
+}
+
+#TokenManagement {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    margin-top: 0px;
+    position: relative;
+}
+
+#APItokenTitle {
+    position: static;
+    font-size: 20px;
+    background-color: antiquewhite;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+#APItoken {
+    position: absolute;
+    top: 23px;
+    left: 140px;
+    width: 60%;
+    padding: 6px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+    font-size: 11px;
+}
+
+#FIRairportManagement {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#FIRselect {
+    position: fixed;
+    top: 245px;
+    left: 120px;
+    width: 15%;
+    padding: 6px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+    font-size: 11px;
+}
+
+#FIRselect:hover {
+    cursor: pointer;
+    background-color: rgb(185, 185, 185);
+}
+
+
+#airportSelect {
+    position: fixed;
+    top: 245px;
+    left: 220px;
+    width: 50%;
+    padding: 6px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+    font-size: 11px;
+}
+
+#resetButton {
+    background-color: red;
+    color: white;
+    position: fixed;
+    top: 245px;
+    left: 530px;
+    padding: 6px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+#resetButton:hover {
+    background-color: rgb(77, 0, 0);
+}
+
+#readme {
+    background-color: rosybrown;
+    margin-left: 80px;
+}
