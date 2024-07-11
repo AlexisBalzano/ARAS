@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self'"/> -->
+    <link rel="stylesheet" href="style.css" />
+    <script src="renderer.js" defer></script>
+    <title>Automatic Runway Assignement System</title>
+</head>
+<body>
+    <h1>Automatic Runway Assignement System</h1>
+    <div id="status">
+        <h2>Status:</h2>
+        <h4 class="statusIndicators" id="rwydata" title="rwydata.json not found">rwydata.json</h4>
+        <h4 class="statusIndicators" id="config" title="config.json not found">config.json</h4>
+        <h4 class="statusIndicators" id="tokenStatus" title="Token empty">API Token</h4>
+
+    </div>
+    <div id="TokenManagement">
+        <h4 id="APItokenTitle">API Token: </h4>
+        <input type="text" id="APItoken">
+    </div>
+    <div id="FIRairportsManagement">
+        <h4>FIR Airports: </h4>
+        <select name="FIR" id="FIRselect">
+            <option value="LFFF">LFFF</option>
+            <option value="LFBB">LFBB</option>
+            <option value="LFMM">LFMM</option>
+            <option value="has4runways">has4runways</option>
+        </select>
+        <input type="text" name="airportSelect" id="airportSelect" placeholder="Airports OACI comma separated" spellcheck="false"></input>
+        <button id="resetButton">RESET</button>
+    </div>
+    <div class="container">
+        <div class="button-wrap">
+            <button id="rwyButton" class="button" for="rwyFile" onclick="loadRwyfile()">Choose .rwy location</button>
+            <button class="FIRbutton button" id="LFFF" onclick="ARAS('LFFF')">LFFF</button>
+            <button class="FIRbutton button" id="LFBB" onclick="ARAS('LFBB')">LFBB</button>
+            <button class="FIRbutton button" id="LFMM" onclick="ARAS('LFMM')">LFMM</button>
+            <button class="FIRbutton button" id="readme" onclick="openReadme()">Readme</button>
+        </div>
+    </div>
+</body>
+</html>
