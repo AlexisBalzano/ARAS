@@ -453,6 +453,89 @@ function FIRconfigUpdater(FIR, airportsList) {
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
 }
 
+
+function FIRmanagement(rwyData, value, option) {
+    //TODO: utilise config.json
+    switch (option) {
+        case 'A': //add
+            //verify that is not already added
+
+            break;
+        case 'D': //delete
+            break;
+        case 'E': //edit
+            break;
+        default: throw error('Invalid action type')
+    }
+}    
+
+function AirportsManagement(rwyData, value, option) {
+    switch (option) {
+        case 'A': //add
+            //verify that is not already added
+            if(rwydata.includes(value)) {
+                throw error('Already supported');
+            }
+            //Sinon l'ajoute à la liste
+            rwyData.push(value);
+            break;
+            
+            case 'D': //delete
+                if(rwydata.includes(value)) {
+                    rwyData.splice(rwyData.indexOf(value), 1);
+                } else {
+                    throw error('Airport not supported');
+                }
+            break;
+        
+        default: throw error('Invalid action type');
+    }
+}
+
+function RwyManagement(rwyData, value, option) {
+    
+}    
+
+function rwyDataModifier(type, value, option) {
+    //TODO:
+    const rwydata = JSON.parse(fs.readFileSync(rwyPath, 'utf8'));
+
+    if (type === 'FIR') {
+        try {
+            FIRmanagement(rwydata, value, option);
+            alertSuccess('FIR data modified successfully');
+        } catch (error) {
+            console.log(error);
+            alertError(error);
+        }
+    } else if (type === 'Airports') {
+        try {
+            AirportsManagement(rwydata, value, option);
+            alertSuccess('Airports data modified successfully');
+        } catch (error) {
+            console.log(error);
+            alertError(error);
+        }
+    } else if (type === 'Runway') {
+        try {
+            RwyManagement(rwydata, value, option);
+            alertSuccess('Runway data modified successfully');
+        } catch (error) {
+            console.log(error);
+            alertError(error);
+        }
+    } else {
+        console.log('Type error in rwydata');
+        alertError('Type error in rwydata');
+    }
+
+    fs.writeFileSync(rwyPath, JSON.stringify(rwydata, null, 2));
+}
+
+
+
+//Listeners
+
 APItoken.addEventListener('change', () => {
     const token = APItoken.value;
     const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
