@@ -24,12 +24,12 @@ function createMainWindow() {
             preload: path.join(__dirname, 'preload.js')
         }
     });
-
+    
     //Open devtolls if in dev env
     if (isDev) {
         mainWindow.webContents.openDevTools();
     }
-
+    
     mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
 }
 
@@ -38,13 +38,29 @@ function createAboutWindow() {
     const aboutWindow = new BrowserWindow({
         resizable: false,
         title: 'About ARAS',
+        icon: path.join(__dirname, 'build-assets/about.png'),
         width: 300,
         height: 250,
     });
-
+    
     aboutWindow.setMenuBarVisibility(null);
     aboutWindow.setAlwaysOnTop(true);
     aboutWindow.loadFile(path.join(__dirname, './renderer/about.html'));
+}
+
+// Create Setting window
+function createSettingWindow() {
+    const settingWindow = new BrowserWindow({
+        resizable: false,
+        title: 'SETTING',
+        icon: path.join(__dirname, 'build-assets/setting.png'),
+        width: 300,
+        height: 250,
+    });
+    
+    settingWindow.setMenuBarVisibility(null);
+    settingWindow.setAlwaysOnTop(true);
+    settingWindow.loadFile(path.join(__dirname, './renderer/setting.html'));
 }
 
 
@@ -80,6 +96,11 @@ const menu = [
     {
         label: 'File',
         submenu: [
+            {
+                label: 'Setting',
+                click: createSettingWindow,
+                accelerator: 'CmdOrCtrl+P'
+            },
             {
                 label: 'Quit',
                 accelerator: 'CmdOrCtrl+W',

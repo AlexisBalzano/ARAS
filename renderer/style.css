@@ -184,3 +184,7 @@ h2 {
     background-color: rosybrown;
     margin-left: 80px;
 }
+
+#readme:hover {
+    background-color: rgb(172, 89, 89);
+}
