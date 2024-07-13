@@ -54,8 +54,8 @@ function createSettingWindow() {
         resizable: false,
         title: 'SETTING',
         icon: path.join(__dirname, 'build-assets/setting.png'),
-        width: 300,
-        height: 250,
+        width: 600,
+        height: 500,
     });
     
     settingWindow.setMenuBarVisibility(null);
