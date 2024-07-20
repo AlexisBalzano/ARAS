@@ -1,23 +1,21 @@
 body {
-    background: #A4A4A4;
-    background: -moz-linear-gradient(left, #A4A4A4 0%, #FFFFFF 35%, #757575 100%);
-    background: -webkit-linear-gradient(left, #A4A4A4 0%, #FFFFFF 35%, #757575 100%);
-    background: linear-gradient(to right, #A4A4A4 0%, #FFFFFF 35%, #757575 100%);
+    background-color: rgb(56, 56, 56);
     cursor: default;
 }
 
 h1 {
-    color: black;
+    color: rgb(212, 212, 212);
     text-align: center;
     font-weight: bolder;
-    margin-top: 60px;
+    margin-top: 20px;
 }
 
 
 h2 {
-    color: black;
+    color: rgb(214, 214, 214);
     margin-right: 10%;
 }
+
 
 #status {
     margin-left: 20px;
@@ -58,7 +56,7 @@ h2 {
     align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 
 #rwyFile {
@@ -71,7 +69,8 @@ h2 {
 }
 
 .button-wrap {
-    position: fixed;
+    position: relative;
+    top: 0px;
 }
 
 .button {
@@ -108,8 +107,9 @@ h2 {
 
 #APItokenTitle {
     position: static;
+    color: rgb(211, 211, 211);
     font-size: 20px;
-    background-color: antiquewhite;
+    background-color: rgb(73, 73, 73);
     padding: 8px;
     border-radius: 10px;
 }
@@ -128,13 +128,22 @@ h2 {
 
 #FIRairportManagement {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
+#FIRairportsTitle {
+    color: white;
+    position: static;
+    background-color: rgb(73, 73, 73);
+    padding: 8px;
+    border-radius: 10px;
+}
+
 #FIRselect {
-    position: fixed;
-    top: 245px;
+    position: relative;
+    top: -62px;
     left: 120px;
     width: 15%;
     padding: 6px;
@@ -151,9 +160,9 @@ h2 {
 
 
 #airportSelect {
-    position: fixed;
-    top: 245px;
-    left: 220px;
+    position: relative;
+    top: -62px;
+    left: 120px;
     width: 50%;
     padding: 6px;
     margin-top: 10px;
@@ -163,11 +172,11 @@ h2 {
 }
 
 #resetButton {
-    background-color: red;
+    background-color: rgb(167, 0, 0);
     color: white;
-    position: fixed;
-    top: 245px;
-    left: 530px;
+    position: relative;
+    top: -62px;
+    left: 117px;
     padding: 6px;
     margin-top: 10px;
     border-radius: 10px;
@@ -177,14 +186,16 @@ h2 {
 }
 
 #resetButton:hover {
-    background-color: rgb(77, 0, 0);
+    background-color: rgb(230, 0, 0);
 }
 
 #readme {
-    background-color: rosybrown;
+    background-color: rgb(5, 100, 5);
     margin-left: 80px;
+    color: black;
 }
 
 #readme:hover {
-    background-color: rgb(172, 89, 89);
+    background-color: rgb(51, 145, 51);
+    color: white;
 }
