@@ -1,13 +1,12 @@
 {
-  "apitoken": null,
+  "apitoken": "",
   "outputPath": null,
   "FIRairports": {
     "LFFF": [
       "LFPO",
       "LFPG",
       "LFPB",
-      "LFOB",
-      "LFQQ"
+      "LFOB"
     ],
     "LFBB": [
       "LFBO",
@@ -28,5 +27,6 @@
     "has4runways": [
       "LFPG"
     ]
-  }
+  },
+  "tokenValidity": false
 }
