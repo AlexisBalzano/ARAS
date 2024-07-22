@@ -12,12 +12,14 @@ require('electron-reload')(__dirname, {
     electron: require(`${__dirname}/node_modules/electron`)
 });
 
+
 let mainWindow;
 
 // Create the main window
 function createMainWindow() {
     mainWindow = new BrowserWindow({
         resizable: false,
+        frame: false,
         title: 'Automatic Runway Assisgnement System',
         width: isDev ? 1000 : 600,
         height: 500,
@@ -28,6 +30,7 @@ function createMainWindow() {
             preload: path.join(__dirname, 'preload.js')
         }
     });
+
     
     //Open devtolls if in dev env
     if (isDev) {
@@ -76,6 +79,10 @@ app.whenReady().then(() => {
     const mainMenu = Menu.buildFromTemplate(menu);
     Menu.setApplicationMenu(mainMenu)
     
+    ipcMain.on('minimize-window', () => mainWindow.minimize());
+
+    ipcMain.on('close-window', () => mainWindow.close());
+
     //Remove mainWindow from memory on close
     mainWindow.on('closed', () => (mainWindow = null));
 

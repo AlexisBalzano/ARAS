@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const Toastify = require('toastify-js');
-const { contextBridge, ipcRenderer, app, shell } = require('electron');
+const { contextBridge, ipcRenderer, shell } = require('electron');
 
 contextBridge.exposeInMainWorld('dialog', {
     showOpenDialog: (options) => ipcRenderer.invoke('showOpenDialog', options)
@@ -41,4 +41,8 @@ contextBridge.exposeInMainWorld('fs', {
     writeFileSync: (...args) => fs.writeFileSync(...args),
     existsSync: (...args) => fs.existsSync(...args),
     statSync: (...args) => fs.statSync(...args),
+})
+
+contextBridge.exposeInMainWorld('ipcRenderer', {
+    send: (...args) => ipcRenderer.send(...args)
 })

@@ -80,7 +80,7 @@ async function assignPaths(filename) {
 
 function tokenValid(configPath) {
     token = JSON.parse(fs.readFileSync(configPath, 'utf8')).apitoken;
-    if (token !== null) {
+    if (token !== null && token !== '') {
         tokenStatus.style.color = 'yellow';
         tokenStatus.title = "API token found but not verified";
         APItoken.placeholder = token;
@@ -88,7 +88,9 @@ function tokenValid(configPath) {
             tokenStatus.style.color = 'green';
             tokenStatus.title = "API token found and verified";
         }
+        return;
     }
+    APItoken.placeholder = 'Enter API token';
 }
 
 async function pathAssignement() {
@@ -100,11 +102,11 @@ async function pathAssignement() {
     
     // Check if config.json is detected
     if (fs.existsSync(configPath)) {
-        configIndicator.style.color = 'green';
+        configIndicator.style.color = 'var(--green)';
         configIndicator.title = "config.json found";
         tokenValid(configPath);
         if (JSON.parse(fs.readFileSync(configPath, 'utf8')).outputPath !== null) {
-            rwyFileButton.style.backgroundColor = 'green';
+            rwyFileButton.style.backgroundColor = 'var(--green)';
             rwyFileButton.innerText = 'Using previous file location';
         }
     } else {
@@ -114,7 +116,7 @@ async function pathAssignement() {
     }
     // Check if rwydata.json is detected
     if (fs.existsSync(rwyPath)) {
-        rwydataIndicator.style.color = 'green';
+        rwydataIndicator.style.color = 'var(--green)';
         rwydataIndicator.title = "rwydata.json found";
     } else {
         alertError('rwydata.json not found');
@@ -577,3 +579,11 @@ resetButton.addEventListener('click', () => {
     alertSuccess(FIR + ' airports resetted')
     populateAiportsList(FIR);
 })
+
+document.getElementById('minimize-window').addEventListener('click', () => {
+    ipcRenderer.send('minimize-window');
+});
+
+document.getElementById('close-window').addEventListener('click', () => {
+    ipcRenderer.send('close-window');
+});
