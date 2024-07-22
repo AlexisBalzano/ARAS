@@ -40,21 +40,6 @@ function createMainWindow() {
     mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
 }
 
-// Create about window
-function createAboutWindow() {
-    const aboutWindow = new BrowserWindow({
-        resizable: false,
-        title: 'About ARAS',
-        icon: path.join(__dirname, 'build-assets/about.png'),
-        width: 300,
-        height: 250,
-    });
-    
-    aboutWindow.setMenuBarVisibility(null);
-    aboutWindow.setAlwaysOnTop(true);
-    aboutWindow.loadFile(path.join(__dirname, './renderer/about.html'));
-}
-
 // Create Setting window
 function createSettingWindow() {
     const settingWindow = new BrowserWindow({
@@ -97,12 +82,6 @@ app.whenReady().then(() => {
 const menu = [
     ...(isMac ? [{
         label: app.name,
-        submenu: [
-            {
-                label: 'About',
-                click: createAboutWindow
-            }
-        ]
     }] : []),
     {
         label: 'File',
@@ -118,16 +97,7 @@ const menu = [
                 click: () => app.quit()
             }
         ]
-    },
-    ...(!isMac ? [{
-       label: 'Help',
-       submenu: [
-        {
-            label:'About',
-            click: createAboutWindow
-        }
-       ] 
-    }] : [])
+    }
 ]
 
 
