@@ -22,7 +22,7 @@ function createMainWindow() {
         frame: false,
         title: 'Automatic Runway Assisgnement System',
         width: isDev ? 1000 : 600,
-        height: 500,
+        height: 400,
         icon: path.join(__dirname, 'build-assets/icon.png'),
         webPreferences: {
             contextIsolation: true,
