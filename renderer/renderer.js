@@ -6,9 +6,12 @@ const APItoken = document.querySelector('#APItoken');
 const FIRselect = document.querySelector('#FIRselect');
 const airportSelect = document.querySelector('#airportSelect');
 const resetButton = document.querySelector('#resetButton');
+const titleBar = document.querySelector('#title-bar');
+const notifSuccess = document.querySelector('.success');
+const notifFailure = document.querySelector('.failure');
+const notifProcessing = document.querySelector('.processing');
 
-
-let isPackaged = false; //FIXME: change before packaging
+let isPackaged = true;
 
 let rwyPath;         //Runway data json file
 let configPath;      //Settings preference json file
@@ -57,13 +60,12 @@ function createDefaultConfig(configPath){
                 "LFPG"
             ]
         }
-    };
+    }
 
     fs.writeFile(configPath, JSON.stringify(defaultConfig, null, 2), (err) => {
         if (err) {
-            console.error(red,'Error creating file:', err);
-        } else {
-            console.log(green,'File created successfully.');
+            console.error(err);
+            return;
         }
     });
     pathAssignement();
@@ -72,20 +74,32 @@ function createDefaultConfig(configPath){
 async function assignPaths(filename) {
     const appPath = await window.electron.getAppPath();
     if(isPackaged) {
-        return path.join(appPath, '..', 'config', filename);
+        return path.join(os.homedir(), 'Documents', 'ARAS', filename);
     } else {
         return path.join(appPath, 'config', filename);   
     }
 }
 
-function tokenValid(configPath) {
-    token = JSON.parse(fs.readFileSync(configPath, 'utf8')).apitoken;
+async function assignUserPreferencePaths() {
+    const appPath = await window.electron.getAppPath();
+    if(isPackaged) {
+        return path.join(path.join(appPath, '..', 'config', 'userPreference.json'));
+    } else {
+        return path.join(appPath, 'config', 'userPreference.json');   
+    }
+}
+
+
+
+async function tokenValid(configPath) {
+    let data = fs.readFileSync(configPath, 'utf8');
+    token = JSON.parse(data).apitoken;
     if (token !== null && token !== '') {
         tokenStatus.style.color = 'yellow';
         tokenStatus.title = "API token found but not verified";
         APItoken.placeholder = token;
         if (JSON.parse(fs.readFileSync(configPath, 'utf8')).tokenValidity) {
-            tokenStatus.style.color = 'green';
+            tokenStatus.style.color = 'var(--green)';
             tokenStatus.title = "API token found and verified";
         }
         return;
@@ -96,30 +110,58 @@ function tokenValid(configPath) {
 async function pathAssignement() {
     // Get the path to the resources directory
 
-    rwyPath = await assignPaths('rwydata.json')
-    configPath = await assignPaths('config.json')
+    rwyPath = await assignPaths('rwydata.json');
+    configPath = await assignPaths('config.json');
+    userPreferencePath = await assignUserPreferencePaths();
 
-    
-    // Check if config.json is detected
-    if (fs.existsSync(configPath)) {
-        configIndicator.style.color = 'var(--green)';
-        configIndicator.title = "config.json found";
-        tokenValid(configPath);
-        if (JSON.parse(fs.readFileSync(configPath, 'utf8')).outputPath !== null) {
-            rwyFileButton.style.backgroundColor = 'var(--green)';
-            rwyFileButton.innerText = 'Using previous file location';
-        }
-    } else {
-        alertError('Config.json not found');
-        createDefaultConfig(configPath)
-        alertSuccess('Default Config.json created');
+    if (!fs.existsSync(userPreferencePath)) {
+        showNotif({type:'failure', message:'User preference not found, please reinstall app', duration:0});
+        return;
     }
-    // Check if rwydata.json is detected
-    if (fs.existsSync(rwyPath)) {
-        rwydataIndicator.style.color = 'var(--green)';
-        rwydataIndicator.title = "rwydata.json found";
+
+    userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
+    if (userPreference.isFirstStartUp) {
+        showNotif({type:'processing', message:'First startup detected, creating default config...', duration:1500});
+        if (!fs.existsSync(path.join(configPath, '..'))) {
+            fs.mkdir(path.join(configPath, '..'), (err) => {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+            });
+        }
+        createDefaultConfig(configPath);
+        tempPath = await window.electron.getAppPath();
+        fs.copyFile( path.join(tempPath, '..', 'config', 'rwydata.json'), path.join(rwyPath, '..', 'rwydata.json'), (err) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+        });
+        userPreference.isFirstStartUp = false;
+        fs.writeFileSync(userPreferencePath, JSON.stringify(userPreference, null, 2));
     } else {
-        alertError('rwydata.json not found');
+        // Check if config.json is detected
+        if (fs.existsSync(configPath)) {
+            configIndicator.style.color = 'var(--green)';
+            configIndicator.title = "config.json foudn";
+            tokenValid(configPath);
+            if (JSON.parse(fs.readFileSync(configPath, 'utf8')).outputPath !== null) {
+                rwyFileButton.style.backgroundColor = 'var(--green)';
+                rwyFileButton.innerText = 'Using previous file location';
+            }
+        } else {
+            showNotif({type: 'failure', message: 'Config.json not found', duration: 1500});
+            createDefaultConfig(configPath)
+            showNotif({type: 'success', message: 'Default Config.json created', duration: 1500});
+        }
+        // Check if rwydata.json is detected
+        if (fs.existsSync(rwyPath)) {
+            rwydataIndicator.style.color = 'var(--green)';
+            rwydataIndicator.title = "rwydata.json found";
+        } else {
+            showNotif({type: 'failure', message: 'rwydata.json not found', duration: 1500});
+        }
     }
 };
 
@@ -156,45 +198,6 @@ function loadRwyfile() {
     }).catch(err => {
         console.log(err);
     });
-}
-
-function alertLoad(message) {
-    Toastify.toast({
-        text: message,
-        duration: 2500,
-        close: false,
-        style: {
-            background: 'yellow',
-            color: 'black',
-            textAlign: 'center'
-        }
-    })
-}
-
-function alertError(message) {
-    Toastify.toast({
-        text: message,
-        duration: -1,
-        close: true,
-        style: {
-            background: 'red',
-            color: 'white',
-            textAlign: 'center'
-        }
-    })
-}
-
-function alertSuccess(message) {
-    Toastify.toast({
-        text: message,
-        duration: 1500,
-        close: false,
-        style: {
-            background: 'green',
-            color: 'white',
-            textAlign: 'center'
-        }
-    })
 }
 
 // Buttons callbacks
@@ -238,7 +241,7 @@ async function ARAS(FIR) {
             const data = fs.readFileSync(rwyPath, 'utf8');
             return JSON.parse(data);
         } catch (err) {
-            console.error(red,'Error reading file:', err);
+            console.error(err);
         }
     }
 
@@ -311,9 +314,7 @@ async function ARAS(FIR) {
 
         fs.appendFile(outputPath, rwychoosen, (err) => {
             if (err) {
-                console.error(red, 'Error writing file:', err);
-            } else {
-                console.log(green, oaci + ' runway assigned successfully.');
+                console.error(err);
             }
         });
     }
@@ -325,9 +326,8 @@ async function ARAS(FIR) {
     let configIsOkay = true;
     function testRequirements() {
         if (fs.existsSync(configPath)) {
-            console.log(green,'config.json found.');
             if (fs.statSync(configPath).size === 0) {
-                console.log(red,'config.json is empty.\nCreating default config.');
+                console.log('config.json is empty.\nCreating default config.');
                 createDefaultConfig(configPath);
             }
             const path = JSON.parse(fs.readFileSync(configPath, 'utf8')).outputPath;
@@ -336,9 +336,9 @@ async function ARAS(FIR) {
                 rwyFileButton.style.backgroundColor = 'green';
                 rwyFileButton.innerText = '.rwy file selected';
             } else {
-                console.log(red,'outputPath not found in config.json.\nOutputing to default location.');
+                console.log('outputPath not found in config.json.\nOutputing to default location.');
                 outputPath = 'LFXX.rwy';
-                alertError('outputPath not found in config.json. Outputing to default location.')
+                showNotif({type: 'failure', message: 'outputPath not found in config.json. Outputing to default location.', duration: 1500});
             }
             //Initializing variables
             LFMM = JSON.parse(fs.readFileSync(configPath, 'utf8')).FIRairports.LFMM;
@@ -347,34 +347,29 @@ async function ARAS(FIR) {
             has4rwy = JSON.parse(fs.readFileSync(configPath, 'utf8')).FIRairports.has4runways;
             token = JSON.parse(fs.readFileSync(configPath, 'utf8')).apitoken;
             if (token === null) {
-                console.log(red,'API Token not found in config.json.\nPlease fill it in.');
-                alertError('API Token not found in config.json. Please fill it in.')
+                console.log('API Token not found in config.json.\nPlease fill it in.');
+                showNotif({type: 'failure', message: 'API Token not found in config.json. Please fill it in.', duration: 1500});
                 configIsOkay = false;
                 return;
             }
         } else {
-            console.log(red,'config.json not found.\nCreating default config.');
+            console.log('config.json not found.\nCreating default config.');
             createDefaultConfig(configPath);
-            alertError('config.json not found. Creating default config.')
+            showNotif({type: 'failure', message: 'config.json not found. Creating default config.', duration: 1500});
             return;
         }
         if (fs.existsSync(outputPath)) {
-            console.log(green,'LFXX.rwy found.');
             fs.writeFile(outputPath, '', (err) => {
                 if (err) {
-                    console.error(red,'Error clearing file:', err);
-                } else {
-                    console.log(green,'LFXX.rwy cleared successfully.');
+                    console.error('Error clearing file:', err);
                 }
             });
         } else {
-            console.log(red,'LFXX.rwy not found.\nCreating one...');
-            alertError('LFXX.rwy not found. Creating one...')
+            console.log('LFXX.rwy not found.\nCreating one...');
+            showNotif({type:'failure', message:'LFXX.rwy not found. Creating one...'})
             fs.writeFile(outputPath, '', (err) => {
                 if (err) {
-                    console.error(red,'Error creating file:', err);
-                } else {
-                    console.log(green,'File created successfully.');
+                    console.error('Error creating file:', err);
                 }
             });
         }
@@ -384,9 +379,7 @@ async function ARAS(FIR) {
         let out = 'ACTIVE_AIRPORT:' + oaci + ':1\n' + 'ACTIVE_AIRPORT:' + oaci + ':0\n'
         fs.appendFile(outputPath, out, (err) =>  {
             if (err) {
-                console.error(red, 'Error writing file:', err);
-            } else {
-                console.log(green, oaci + ' activated successfully.');
+                console.error(err);
             }
         });
     }
@@ -394,7 +387,7 @@ async function ARAS(FIR) {
     //Assign runways
     async function assignRunwaysForFIRs(FIRoaci) {
         let isOkay = true;
-        alertLoad('Assigning Runways... Wait for the confirmation notification')
+        previousNotif = showNotif({type: 'processing', message: 'Assigning Runways... Wait for the confirmation notification', duration: 0});
         for (const i of FIRoaci) {
             try {
                 const metarJson = await GetMetar(i);
@@ -405,10 +398,11 @@ async function ARAS(FIR) {
                 isOkay = false;
             }
         }
+        clearNotif(previousNotif);
         if (isOkay) {
-            alertSuccess('Runways assigned')
+            showNotif({type: 'success', message: 'Runways assigned', duration: 1500});
         } else {
-            alertError('Assignement error!')
+            showNotif({type: 'failure', message: 'Assignement error!', duration: 1500});
         }
     }
     
@@ -433,14 +427,14 @@ async function ARAS(FIR) {
     for(i in FIRoaci){
         activateAirports(FIRoaci[i])
     }
-    alertSuccess('Airports Activated')
+    showNotif({type:'success', message:'Airports activated', duration:1500})
     
     
     await assignRunwaysForFIRs(FIRoaci);
     
     console.log('Token validity:', config.tokenValidity);
     if(!config.tokenValidity) {
-        alertError('API token invalid')
+        showNotif({type: 'failure', message: 'Invalid API token', duration: 1500});
     }
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
     tokenValid(configPath);
@@ -505,35 +499,59 @@ function rwyDataModifier(type, value, option) {
     if (type === 'FIR') {
         try {
             FIRmanagement(rwydata, value, option);
-            alertSuccess('FIR data modified successfully');
+            showNotif({type: 'success', message: 'FIR data modified successfully', duration: 1500});
         } catch (error) {
             console.log(error);
-            alertError(error);
+            showNotif({type: 'failure', message: error, duration: 1500});
         }
     } else if (type === 'Airports') {
         try {
             AirportsManagement(rwydata, value, option);
-            alertSuccess('Airports data modified successfully');
+            showNotif({type: 'success', message: 'Airports data modified successfully', duration: 1500});
         } catch (error) {
             console.log(error);
-            alertError(error);
+            showNotif({type: 'failure', message: error, duration: 1500});
         }
     } else if (type === 'Runway') {
         try {
             RwyManagement(rwydata, value, option);
-            alertSuccess('Runway data modified successfully');
+            showNotif({type: 'success', message: 'Runway data modified successfully', duration: 1500});
         } catch (error) {
-            console.log(error);
-            alertError(error);
+            showNotif({type: 'failure', message: error, duration: 1500});
         }
     } else {
-        console.log('Type error in rwydata');
-        alertError('Type error in rwydata');
+        showNotif({type: 'failure', message: 'Type error in rwydata', duration: 1500});
     }
 
     fs.writeFileSync(rwyPath, JSON.stringify(rwydata, null, 2));
 }
 
+//Notifications system
+function showNotif(options) {
+    let notif;
+    if (options.type === 'success') {
+        notif = notifSuccess.cloneNode(true);
+    } else if (options.type === 'failure') {
+        notif = notifFailure.cloneNode(true);
+    } else {
+        notif = notifProcessing.cloneNode(true);
+    }
+    notif.innerHTML = options.message;
+    notif.style.display = 'block';
+    titleBar.insertAdjacentElement('afterend', notif);
+
+    if (options.duration !== 0) {
+        setTimeout(() => {
+            notif.style.display = 'none';
+            notif.remove();
+        }, options.duration);
+    }
+    return notif;
+}
+
+function clearNotif(notif) {
+    document.body.removeChild(notif);
+}
 
 
 //Listeners
@@ -544,7 +562,7 @@ APItoken.addEventListener('change', () => {
     config.apitoken = token;
     config.tokenValidity = false;
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-    alertSuccess('API token saved')
+    showNotif({type: 'success', message: 'API token saved', duration: 1500});
     tokenValid(configPath);
 })
 
@@ -556,12 +574,12 @@ FIRselect.addEventListener('change', () => {
 airportSelect.addEventListener('change', () => {
     const airport = airportSelect.value;
     if(airport === '') {
-        alertError('No airport entered');
+        showNotif({type: 'failure', message: 'No airport entered', duration: 1500});
         return;
     }
     airportsList = airport.split(',').map(item => item.trim()).filter(item => item !== '');
     FIRconfigUpdater(FIR, airportsList);
-    alertSuccess(FIR + ' airports updated')
+    showNotif({type: 'success', message: FIR + ' airports updated', duration: 1500});
 })
 
 resetButton.addEventListener('click', () => {
@@ -576,7 +594,7 @@ resetButton.addEventListener('click', () => {
         airportsList = ['LFPG'];
     }
     FIRconfigUpdater(FIR, airportsList);
-    alertSuccess(FIR + ' airports resetted')
+    showNotif({type: 'success', message: FIR + ' airports reset', duration: 1500});
     populateAiportsList(FIR);
 })
 
@@ -587,3 +605,4 @@ document.getElementById('minimize-window').addEventListener('click', () => {
 document.getElementById('close-window').addEventListener('click', () => {
     ipcRenderer.send('close-window');
 });
+

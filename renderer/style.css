@@ -64,6 +64,52 @@ h2 {
     margin-right: 10%;
 }
 
+.notifications {
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+    z-index: 999;
+    width: 90%;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.success {
+    background-color: rgb(0, 128, 0);
+    color: rgb(47, 247, 47);
+    padding: 20px;
+    border: 2px solid rgb(0, 128, 0);
+    border-radius: 7px;
+    display: none;
+    backdrop-filter: blur(1px);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+.failure {
+    background-color: rgb(128, 0, 0);
+    color: rgb(185, 25, 25);
+    padding: 20px;
+    border: 2px solid rgb(185, 25, 25);
+    border-radius: 7px;
+    display: none;
+    backdrop-filter: blur(1px);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+.processing {
+    background-color: rgb(207, 195, 21);
+    color: rgb(232, 253, 42);
+    padding: 20px;
+    border: 2px solid rgb(207, 195, 21);
+    border-radius: 7px;
+    display: none;
+    backdrop-filter: blur(1px);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
 
 #status {
     background-color: var(--widget-color);
@@ -252,7 +298,7 @@ h2 {
 
 #readme {
     background-color: var(--green);
-    margin-left: 74px;
+    margin-left: 59px;
     color: white;
 }
 

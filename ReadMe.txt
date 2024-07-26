@@ -24,7 +24,7 @@ To modify the default list, select the FIR in the dropdown menu, then, the list 
 Modify this list with ICAO codes separated by comma. You can then add or remove airports according to your requirements.
 Clicking the reset button will revert to default list of airports for the currently selected FIR.
 Note: if you are adding unsopported ICAO, you will need to modify the rwydata.json file to populate data for this specific ICAO.
-      this file is located inside the ARAS program folder at : C:/users/<username>/appdata/local/programs/aras/ressources/config/
+      this file is located inside the ARAS program folder in your Documents folder /ARAS
       Copy the syntax and add the custom ICAOs.
       the has4runway "FIR" is used to define airports equipped with 2 departures runways as well as 2 arrival one. Edit this list the same way as the others.
 
