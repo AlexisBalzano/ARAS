@@ -6,7 +6,7 @@ const APItoken = document.querySelector('#APItoken');
 const FIRselect = document.querySelector('#FIRselect');
 const airportSelect = document.querySelector('#airportSelect');
 const resetButton = document.querySelector('#resetButton');
-const titleBar = document.querySelector('#title-bar');
+const notifications = document.querySelector('.notifications');
 const notifSuccess = document.querySelector('.success');
 const notifFailure = document.querySelector('.failure');
 const notifProcessing = document.querySelector('.processing');
@@ -440,10 +440,7 @@ async function ARAS(FIR) {
     
     
     await assignRunwaysForFIRs(FIRoaci);
-    
-    if(!config.tokenValidity) {
-        showNotif({type: 'failure', message: 'Invalid API token', duration: 1500});
-    }
+
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
     tokenValid(configPath);
 }
@@ -546,19 +543,25 @@ function showNotif(options) {
     }
     notif.innerHTML = options.message;
     notif.style.display = 'block';
-    titleBar.insertAdjacentElement('afterend', notif);
+    notifications.appendChild(notif);
 
     if (options.duration !== 0) {
         setTimeout(() => {
-            notif.style.display = 'none';
-            notif.remove();
+            notif.classList.add('notifOut');
+            setTimeout(() => {
+                notif.style.display = 'none';
+                notif.remove();
+            }, 99);
         }, options.duration);
     }
     return notif;
 }
 
 function clearNotif(notif) {
-    document.body.removeChild(notif);
+    notif.classList.add('notifOut');
+    setTimeout(() => {
+        notifications.removeChild(notif);
+    }, 99);
 }
 
 
@@ -570,7 +573,10 @@ APItoken.addEventListener('change', () => {
     config.apitoken = token;
     config.tokenValidity = false;
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-    showNotif({type: 'success', message: 'API token saved', duration: 1500});
+    let notif1 = showNotif({type: 'success', message: 'API token saved', duration: 0});
+    setTimeout(() => {
+        clearNotif(notif1);
+    }, 1500);
     tokenValid(configPath);
 })
 

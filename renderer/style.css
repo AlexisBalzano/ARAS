@@ -1,3 +1,25 @@
+
+/* Animations */
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-100%);
+    }
+}
+
+/* Global variable */
 :root {
     --font-family: arial, sans-serif;
     --background-color: rgb(82, 82, 82);
@@ -66,49 +88,58 @@ h2 {
 
 .notifications {
     position: fixed;
-    align-items: center;
-    justify-content: center;
+    display: flex;
+    flex-direction: column;
     text-align: center;
     margin-top: 20px;
     font-size: 18px;
     z-index: 999;
     width: 90%;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 20px;
+    left: 5%;
 }
 
 .success {
-    background-color: rgb(0, 128, 0);
-    color: rgb(47, 247, 47);
+    background-color: rgba(0, 128, 0, 0.466);
+    color: white;
     padding: 20px;
     border: 2px solid rgb(0, 128, 0);
     border-radius: 7px;
     display: none;
+    margin-bottom: 5px;
     backdrop-filter: blur(1px);
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.1s ease-out;
 }
 
 .failure {
-    background-color: rgb(128, 0, 0);
-    color: rgb(185, 25, 25);
+    background-color: rgba(128, 0, 0, 0.466);
+    color: white;
     padding: 20px;
     border: 2px solid rgb(185, 25, 25);
     border-radius: 7px;
     display: none;
+    margin-bottom: 5px;
     backdrop-filter: blur(1px);
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.1s ease-out;
 }
 
 .processing {
-    background-color: rgb(207, 195, 21);
-    color: rgb(232, 253, 42);
+    background-color: rgba(207, 195, 21, 0.466);
+    color: white;
     padding: 20px;
     border: 2px solid rgb(207, 195, 21);
     border-radius: 7px;
     display: none;
+    margin-bottom: 5px;
     backdrop-filter: blur(1px);
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.1s ease-out;
+}
+
+.notifOut {
+    animation: slideOut 0.1s ease-in;
 }
 
 #status {
