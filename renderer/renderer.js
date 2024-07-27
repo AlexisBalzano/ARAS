@@ -1,3 +1,5 @@
+import { testFunction } from "./notification.js";
+
 const rwyFileButton = document.querySelector('#rwyButton')
 const rwydataIndicator = document.querySelector('#rwydata');
 const configIndicator = document.querySelector('#config');
@@ -16,9 +18,10 @@ let isPackaged = false;
 let rwyPath;         //Runway data json file
 let configPath;      //Settings preference json file
 
-async function openReadme() {
+window.openReadme = async function() {
+    testFunction()
     let readmePath;
-    if (!isPackaged) {
+    if (isPackaged) {
         const currentDir = path.dirname(url.fileURLToPath(window.location.href));
         readmePath = path.join(currentDir, '..', 'README.txt');
     } else {
@@ -113,17 +116,18 @@ async function pathAssignement() {
 
     rwyPath = await assignPaths('rwydata.json');
     configPath = await assignPaths('config.json');
-    userPreferencePath = await assignUserPreferencePaths();
+    let userPreferencePath = await assignUserPreferencePaths();
 
     if (!fs.existsSync(userPreferencePath)) {
         showNotif({type:'failure', message:'User preference not found, please reinstall app', duration:0});
         return;
     }
 
+    let userPreference;
     try {
         userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
     } catch(error) {
-        showNotif({type:'failure', message:'User Preference corrupted, please reinsrall app', duration:0});
+        showNotif({type:'failure', message:'User Preference corrupted, please reinstall app', duration:0});
         return;
     }
     
@@ -137,7 +141,9 @@ async function pathAssignement() {
                 }
             });
         }
-        createDefaultConfig(configPath);
+        if (isPackaged) {
+            createDefaultConfig(configPath);
+        }
         tempPath = await window.electron.getAppPath();
         fs.copyFile( path.join(tempPath, '..', 'config', 'rwydata.json'), path.join(rwyPath, '..', 'rwydata.json'), (err) => {
             if (err) {
@@ -159,8 +165,10 @@ async function pathAssignement() {
             }
         } else {
             showNotif({type: 'failure', message: 'Config.json not found', duration: 1500});
-            createDefaultConfig(configPath)
-            showNotif({type: 'success', message: 'Default Config.json created', duration: 1500});
+            if (isPackaged) {
+                createDefaultConfig(configPath)
+                showNotif({type: 'success', message: 'Default Config.json created', duration: 1500});
+            }
         }
         // Check if rwydata.json is detected
         if (fs.existsSync(rwyPath)) {
@@ -186,7 +194,7 @@ window.onload = async function () {
 
 
 
-function loadRwyfile() {
+window.loadRwyfile = function () {
     window.dialog.showOpenDialog({
         properties: ['openFile'],
         filters: [{
@@ -210,14 +218,7 @@ function loadRwyfile() {
 // Buttons callbacks
 // ARAS code
 let token;
-async function ARAS(FIR) {
-
-
-    //VARIABLES
-
-    const red = '\x1b[31m%s\x1b[0m';
-    const green = '\x1b[32m%s\x1b[0m';
-
+window.ARAS = async function (FIR) {
     let LFFF = [];
     let LFBB = [];
     let LFMM = [];
@@ -360,10 +361,12 @@ async function ARAS(FIR) {
                 return;
             }
         } else {
-            console.log('config.json not found.\nCreating default config.');
-            createDefaultConfig(configPath);
-            showNotif({type: 'failure', message: 'config.json not found. Creating default config.', duration: 1500});
-            return;
+            if (!isPackaged) {
+                console.log('config.json not found.\nCreating default config.');
+                createDefaultConfig(configPath);
+                showNotif({type: 'failure', message: 'config.json not found. Creating default config.', duration: 1500});
+                return;
+            }
         }
         if (fs.existsSync(outputPath)) {
             fs.writeFile(outputPath, '', (err) => {
