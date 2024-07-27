@@ -21,7 +21,7 @@ let configPath;      //Settings preference json file
 window.openReadme = async function() {
     testFunction()
     let readmePath;
-    if (isPackaged) {
+    if (!isPackaged) {
         const currentDir = path.dirname(url.fileURLToPath(window.location.href));
         readmePath = path.join(currentDir, '..', 'README.txt');
     } else {
@@ -141,9 +141,9 @@ async function pathAssignement() {
                 }
             });
         }
-        if (isPackaged) {
-            createDefaultConfig(configPath);
-        }
+        
+        createDefaultConfig(configPath);
+        
         tempPath = await window.electron.getAppPath();
         fs.copyFile( path.join(tempPath, '..', 'config', 'rwydata.json'), path.join(rwyPath, '..', 'rwydata.json'), (err) => {
             if (err) {
@@ -165,10 +165,9 @@ async function pathAssignement() {
             }
         } else {
             showNotif({type: 'failure', message: 'Config.json not found', duration: 1500});
-            if (isPackaged) {
-                createDefaultConfig(configPath)
-                showNotif({type: 'success', message: 'Default Config.json created', duration: 1500});
-            }
+            createDefaultConfig(configPath)
+            showNotif({type: 'success', message: 'Default Config.json created', duration: 1500});
+            
         }
         // Check if rwydata.json is detected
         if (fs.existsSync(rwyPath)) {
@@ -361,12 +360,12 @@ window.ARAS = async function (FIR) {
                 return;
             }
         } else {
-            if (!isPackaged) {
-                console.log('config.json not found.\nCreating default config.');
-                createDefaultConfig(configPath);
-                showNotif({type: 'failure', message: 'config.json not found. Creating default config.', duration: 1500});
-                return;
-            }
+            
+            console.log('config.json not found.\nCreating default config.');
+            createDefaultConfig(configPath);
+            showNotif({type: 'failure', message: 'config.json not found. Creating default config.', duration: 1500});
+            return;
+            
         }
         if (fs.existsSync(outputPath)) {
             fs.writeFile(outputPath, '', (err) => {
@@ -461,83 +460,6 @@ function FIRconfigUpdater(FIR, airportsList) {
     const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
     config.FIRairports[FIR] = airportsList;
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-}
-
-
-function FIRmanagement(rwyData, value, option) {
-    //TODO: utilise config.json
-    switch (option) {
-        case 'A': //add
-            //verify that is not already added
-
-            break;
-        case 'D': //delete
-            break;
-        case 'E': //edit
-            break;
-        default: throw error('Invalid action type')
-    }
-}    
-
-function AirportsManagement(rwyData, value, option) {
-    switch (option) {
-        case 'A': //add
-            //verify that is not already added
-            if(rwydata.includes(value)) {
-                throw error('Already supported');
-            }
-            //Sinon l'ajoute à la liste
-            rwyData.push(value);
-            break;
-            
-            case 'D': //delete
-                if(rwydata.includes(value)) {
-                    rwyData.splice(rwyData.indexOf(value), 1);
-                } else {
-                    throw error('Airport not supported');
-                }
-            break;
-        
-        default: throw error('Invalid action type');
-    }
-}
-
-function RwyManagement(rwyData, value, option) {
-    
-}    
-
-function rwyDataModifier(type, value, option) {
-    //TODO:
-    const rwydata = JSON.parse(fs.readFileSync(rwyPath, 'utf8'));
-
-    if (type === 'FIR') {
-        try {
-            FIRmanagement(rwydata, value, option);
-            showNotif({type: 'success', message: 'FIR data modified successfully', duration: 1500});
-        } catch (error) {
-            console.log(error);
-            showNotif({type: 'failure', message: error, duration: 1500});
-        }
-    } else if (type === 'Airports') {
-        try {
-            AirportsManagement(rwydata, value, option);
-            showNotif({type: 'success', message: 'Airports data modified successfully', duration: 1500});
-        } catch (error) {
-            console.log(error);
-            showNotif({type: 'failure', message: error, duration: 1500});
-        }
-    } else if (type === 'Runway') {
-        try {
-            RwyManagement(rwydata, value, option);
-            showNotif({type: 'success', message: 'Runway data modified successfully', duration: 1500});
-        } catch (error) {
-            showNotif({type: 'failure', message: error, duration: 1500});
-        }
-    } else {
-        showNotif({type: 'failure', message: 'Type error in rwydata', duration: 1500});
-    }
-
-    fs.writeFileSync(rwyPath, JSON.stringify(rwydata, null, 2));
 }
 
 //Notifications system

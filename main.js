@@ -4,7 +4,7 @@ const { ipcMain, dialog, app } = require('electron');
 const fs = require('fs');
 
 // process.env.NODE_ENV = 'production';
-isPackaged = true;
+isPackaged = false;
 
 const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
