@@ -11,7 +11,7 @@ const notifSuccess = document.querySelector('.success');
 const notifFailure = document.querySelector('.failure');
 const notifProcessing = document.querySelector('.processing');
 
-let isPackaged = true;
+let isPackaged = false;
 
 let rwyPath;         //Runway data json file
 let configPath;      //Settings preference json file
@@ -120,7 +120,13 @@ async function pathAssignement() {
         return;
     }
 
-    userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
+    try {
+        userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
+    } catch(error) {
+        showNotif({type:'failure', message:'User Preference corrupted, please reinsrall app', duration:0});
+        return;
+    }
+    
     if (userPreference.isFirstStartUp) {
         showNotif({type:'processing', message:'First startup detected, creating default config...', duration:1500});
         if (!fs.existsSync(path.join(configPath, '..'))) {
