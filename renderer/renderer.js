@@ -59,7 +59,8 @@ function createDefaultConfig(configPath){
             "has4runways": [
                 "LFPG"
             ]
-        }
+        },
+        "tokenValidity": false
     }
 
     fs.writeFile(configPath, JSON.stringify(defaultConfig, null, 2), (err) => {
@@ -229,12 +230,12 @@ async function ARAS(FIR) {
             .then(response => {
                 if(response.status === 403 || response.status === 401) {
                     throw new Error('Invalid API token');
+                } else if (response.status === 408) {
+                    throw new Error('Request timed out');
                 }
                 return response.json()
             })
-            .catch(error => {
-            });
-    }
+}
 
     function getRwyData(oaci){
         try {
@@ -394,15 +395,23 @@ async function ARAS(FIR) {
                 
                 assignRunways(i, metarJson);
             } catch (error) {
-                config.tokenValidity = false;
+                console.log(error)
+                if(error.message === 'Invalid API token') {
+                    config.tokenValidity = false;
+                    showNotif({type: 'failure', message: 'Invalid API token', duration: 5000});
+                } else if (error.message === 'Request timed out') {                
+                    showNotif({type: 'failure', message: 'Request timed out', duration: 5000});
+                } else {
+                    showNotif({type: 'failure', message: 'Error fetching metars', duration: 5000});
+                }
                 isOkay = false;
+                clearNotif(previousNotif);
+                return;
             }
         }
         clearNotif(previousNotif);
         if (isOkay) {
             showNotif({type: 'success', message: 'Runways assigned', duration: 1500});
-        } else {
-            showNotif({type: 'failure', message: 'Assignement error!', duration: 1500});
         }
     }
     
@@ -432,7 +441,6 @@ async function ARAS(FIR) {
     
     await assignRunwaysForFIRs(FIRoaci);
     
-    console.log('Token validity:', config.tokenValidity);
     if(!config.tokenValidity) {
         showNotif({type: 'failure', message: 'Invalid API token', duration: 1500});
     }

@@ -3,7 +3,7 @@ const { BrowserWindow, Menu } = require('electron');
 const { ipcMain, dialog, app } = require('electron');
 const fs = require('fs');
 
-process.env.NODE_ENV = 'production';
+// process.env.NODE_ENV = 'production';
 isPackaged = true;
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -17,12 +17,14 @@ const isMac = process.platform === 'darwin';
 
 const appPath = app.getAppPath();
 let userPreferencePath;
+let coordinates;
+
 if(isPackaged) {
-    userPreferencePath = path.join(path.join(appPath, '..', 'config', 'userPreference.json'));
+    coordinates = [450, 350];
 } else {
     userPreferencePath = path.join(appPath, 'config', 'userPreference.json');
+    coordinates = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8')).coordinates;
 }
-let coordinates = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8')).coordinates;
 
 if(coordinates === undefined) {
     coordinates = [450, 350]
@@ -89,13 +91,14 @@ app.whenReady().then(() => {
 
     //Remove mainWindow from memory on close
     mainWindow.on('closed', () => (mainWindow = null));
-    
-    mainWindow.on('moved', () => {
-        let coordo = mainWindow.getPosition();
-        let userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
-        userPreference.coordinates = coordo;
-        fs.writeFileSync(userPreferencePath, JSON.stringify(userPreference));
-    });
+    if(isPackaged) {
+        mainWindow.on('moved', () => {
+            let coordo = mainWindow.getPosition();
+            let userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
+            userPreference.coordinates = coordo;
+            fs.writeFileSync(userPreferencePath, JSON.stringify(userPreference));
+        });
+    }
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
