@@ -36,6 +36,7 @@ html, body {
     height: 100%;
     background-color: var(--background-color);
     cursor: default;
+    position: relative;
 }
 
 #title-bar {
@@ -181,14 +182,6 @@ h2 {
     text-align: center;
 }
 
-.container {
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    width: 100%;
-    margin-bottom: 0px;
-}
-
 #rwyFile {
     position: fixed;
     z-index: -1;
@@ -197,8 +190,6 @@ h2 {
     font-size: 15px;
     color: black;
 }
-
-
 
 #path {
     position: fixed;
@@ -239,28 +230,34 @@ h2 {
     font-size: 11px;
 }
 
-#FIRairportManagement {
+#FIRairportsManagement {
     display: flex;
-    flex-direction: column;
+    left: 4%;
+    height: 20px;
+    padding: 8px;
+    border-radius: 10px;
+    width: 89%;
     align-items: center;
-    justify-content: center;
+    position: relative;
+    background-color: var(--widget-color);
+    margin-bottom: 40px;
 }
 
 #FIRairportsTitle {
     color: white;
     position: static;
-    background-color: var(--widget-color);
     padding: 8px;
     border-radius: 10px;
     width: 89%;
-    transform: translate(4%, 0);
+    position: relative;
+    left: -1%;
 }
 
 #FIRselect {
     position: relative;
-    top: -62px;
-    left: 130px;
-    width: 15%;
+    left: -45px;
+    top: -4px;
+    width: 40%;
     padding: 6px;
     margin-top: 10px;
     border-radius: 10px;
@@ -276,9 +273,9 @@ h2 {
 
 #airportSelect {
     position: relative;
-    top: -62px;
-    left: 130px;
-    width: 46%;
+    top: -4px;
+    left: -30px;
+    width: 200%;
     padding: 6px;
     margin-top: 10px;
     border-radius: 10px;
@@ -290,8 +287,8 @@ h2 {
     background-color: var(--red);
     color: white;
     position: relative;
-    top: -62px;
-    left: 128px;
+    top: -4px;
+    left: -15px;
     padding: 6px;
     margin-top: 10px;
     border-radius: 10px;
@@ -307,6 +304,8 @@ h2 {
 
 
 .button-wrap {
+    width: 90%;
+    margin-bottom: 0px;
     position: relative;
     left: 25px;
     top: -15px;
@@ -329,7 +328,7 @@ h2 {
 
 #readme {
     background-color: var(--green);
-    margin-left: 59px;
+    margin-left: 40px;
     color: white;
 }
 
