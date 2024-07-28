@@ -1,5 +1,6 @@
 import { showNotif, clearNotif } from "./notification.js";
 import { ARAS as ARASimport } from "./RWYassignement.js";
+import { assignPaths, assignUserPreferencePaths } from "./pathAssignement.js";
 
 const rwyFileButton = document.querySelector('#rwyButton')
 const rwydataIndicator = document.querySelector('#rwydata');
@@ -73,23 +74,7 @@ function createDefaultConfig(configPath){
     pathAssignement();
 }
 
-async function assignPaths(filename) {
-    const appPath = await window.electron.getAppPath();
-    if(isPackaged) {
-        return path.join(os.homedir(), 'Documents', 'ARAS', filename);
-    } else {
-        return path.join(appPath, 'config', filename);   
-    }
-}
 
-async function assignUserPreferencePaths() {
-    const appPath = await window.electron.getAppPath();
-    if(isPackaged) {
-        return path.join(path.join(appPath, '..', 'config', 'userPreference.json'));
-    } else {
-        return path.join(appPath, 'config', 'userPreference.json');   
-    }
-}
 
 
 
@@ -112,9 +97,9 @@ async function tokenValid(configPath) {
 async function pathAssignement() {
     // Get the path to the resources directory
 
-    rwyPath = await assignPaths('rwydata.json');
-    configPath = await assignPaths('config.json');
-    let userPreferencePath = await assignUserPreferencePaths();
+    rwyPath = await assignPaths('rwydata.json', isPackaged);
+    configPath = await assignPaths('config.json', isPackaged);
+    let userPreferencePath = await assignUserPreferencePaths(isPackaged);
 
     if (!fs.existsSync(userPreferencePath)) {
         showNotif({type:'failure', message:'User preference not found, please reinstall app', duration:0});
@@ -213,8 +198,6 @@ window.loadRwyfile = function () {
 }
 
 window.ARAS = async function (FIR) {
-    console.log(fs.readFileSync(configPath, 'utf8'));
-
     ARASimport(FIR, configPath, rwyPath, showNotif, clearNotif, createDefaultConfig, tokenValid, fs);
 }
 

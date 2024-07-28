@@ -237,7 +237,6 @@ export async function ARAS(FIR, configPath, rwyPath, showNotif, clearNotif, crea
     
     await assignRunwaysForFIRs(FIRoaci);
     
-    console.log(isOkay)
     if(isOkay) {
         config.tokenValidity = true;
         fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
