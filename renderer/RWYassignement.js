@@ -1,4 +1,6 @@
 const rwyFileButton = document.querySelector('#rwyButton')
+const tokenStatus = document.querySelector('#tokenStatus');
+
 
 
 // ARAS code
@@ -184,8 +186,8 @@ export async function ARAS(FIR, configPath, rwyPath, showNotif, clearNotif, crea
     }
 
     //Assign runways
+    let isOkay = true;
     async function assignRunwaysForFIRs(FIRoaci) {
-        let isOkay = true;
         let previousNotif = showNotif({type: 'processing', message: 'Assigning Runways... Wait for the confirmation notification', duration: 0});
         for (const i of FIRoaci) {
             try {
@@ -193,9 +195,10 @@ export async function ARAS(FIR, configPath, rwyPath, showNotif, clearNotif, crea
 
                 assignRunways(i, metarJson);
             } catch (error) {
-                console.log(error)
                 if(error.message === 'Invalid API token') {
                     config.tokenValidity = false;
+                    tokenStatus.style.color = 'red';
+                    tokenStatus.title = 'Invalid API token';
                     showNotif({type: 'failure', message: 'Invalid API token', duration: 5000});
                 } else if (error.message === 'Request timed out') {                
                     showNotif({type: 'failure', message: 'Request timed out', duration: 5000});
@@ -214,14 +217,9 @@ export async function ARAS(FIR, configPath, rwyPath, showNotif, clearNotif, crea
     }
 
     let config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-    config.tokenValidity = true;
+    config.tokenValidity = false;
     
     testRequirements()
-    if(!configIsOkay) {
-        config.tokenValidity = false;
-        return;
-    }
-    
     
     let FIRoaci = LFMM
     
@@ -237,9 +235,15 @@ export async function ARAS(FIR, configPath, rwyPath, showNotif, clearNotif, crea
     }
     showNotif({type:'success', message:'Airports activated', duration:1500})
     
-    
     await assignRunwaysForFIRs(FIRoaci);
-
-    fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-    tokenValid(configPath);
+    
+    console.log(isOkay)
+    if(isOkay) {
+        config.tokenValidity = true;
+        fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+        tokenValid(configPath);
+    } else {
+        fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+        return;
+    }
 }
