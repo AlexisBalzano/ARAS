@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings</title>
-    <script src="./js/settings.js"></script>
+    <script src="./js/settings.js" defer></script>
     <link rel="stylesheet" href="./css/settings.css">
 </head>
 <body>
@@ -21,38 +21,38 @@
                 <h3>Runway 1:</h3>
                 <div class="inputgroup">
                     <label for="heading">Heading: </label>
-                    <input id="heading" name="heading" type="number"/>
+                    <input id="heading" name="heading" type="number" max="360"/>
                 </div>
                 <div class="inputgroup">
                     <label for="preferential">Preferential: </label>
-                    <input id="preferential" name="preferential" type="number"/>
+                    <input id="preferential" name="preferential" type="number" max="19"/>
                 </div>
                 <div class="inputgroup">
                     <label for="departure">Departure: </label>
-                    <input id="departure" name="departure" type="text"/>
+                    <input id="departure" name="departure" type="text" maxlength="3"/>
                 </div>
                 <div class="inputgroup">
                     <label for="arrival">Arrival: </label>
-                    <input id="arrival" name="arrival" type="text"/>
+                    <input id="arrival" name="arrival" type="text" maxlength="3"/>
                 </div>
             </div>
             <div class="runwayinfo">
                 <h3>Runway 2:</h3>
                 <div class="inputgroup">
                     <label for="heading2">Heading: </label>
-                    <input id="heading2" name="heading" type="number"/>
+                    <input id="heading2" name="heading" type="number" max="360"/>
                 </div>
                 <div class="inputgroup">
                     <label for="preferential2">Preferential: </label>
-                    <input id="preferential2" name="preferential" type="number"/>
+                    <input id="preferential2" name="preferential" type="number" max="19"/>
                 </div>
                 <div class="inputgroup">
                     <label for="departure2">Departure: </label>
-                    <input id="departure2" name="departure" type="text"/>
+                    <input id="departure2" name="departure" type="text" maxlength="3"/>
                 </div>
                 <div class="inputgroup">
                     <label for="arrival2">Arrival: </label>
-                    <input id="arrival2" name="arrival" type="text"/>
+                    <input id="arrival2" name="arrival" type="text" maxlength="3"/>
                 </div>
             </div>
             <div class="inputgroup" id="has4runwaygroup">
