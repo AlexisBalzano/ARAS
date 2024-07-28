@@ -2,13 +2,13 @@ import { showNotif, clearNotif } from "./notification.js";
 import { ARAS as ARASimport } from "./RWYassignement.js";
 import { pathAssignement, setPathPackagedState } from "./pathAssignement.js";
 import { createDefaultConfig, tokenValid, openReadme, setPackageState } from "./fileManager.js";
+import { FIRconfigUpdater, populateAiportsList } from "./DataManager.js";
 
 const rwyFileButton = document.querySelector('#rwyButton')
 const APItoken = document.querySelector('#APItoken');
 const FIRselect = document.querySelector('#FIRselect');
 const airportSelect = document.querySelector('#airportSelect');
 const resetButton = document.querySelector('#resetButton');
-const tokenStatus = document.querySelector('#tokenStatus');
 
 
 
@@ -24,15 +24,12 @@ let paths = {
 
 window.openReadme = openReadme;
 
-function populateAiportsList(FIR) {
-    airportsList = JSON.parse(fs.readFileSync(paths.configPath, 'utf8')).FIRairports[FIR];
-    airportSelect.value = airportsList.join(', ');
-}
+
 
 window.onload = async function () {
     await pathAssignement(paths, tokenValid, createDefaultConfig);
     setTimeout(() => {
-    populateAiportsList('LFFF');
+    populateAiportsList('LFFF', paths);
     }, 1000);
 };
 
@@ -64,14 +61,9 @@ window.ARAS = async function (FIR) {
 }
 
 
-let FIR = 'LFFF'
-let airportsList = []
 
-function FIRconfigUpdater(FIR, airportsList) {
-    const config = JSON.parse(fs.readFileSync(paths.configPath, 'utf8'));
-    config.FIRairports[FIR] = airportsList;
-    fs.writeFileSync(paths.configPath, JSON.stringify(config, null, 2));
-}
+
+
 
 //Listeners
 
@@ -88,9 +80,10 @@ APItoken.addEventListener('change', () => {
     tokenValid(paths.configPath);
 })
 
+let FIR = 'LFFF';
 FIRselect.addEventListener('change', () => {
     FIR = FIRselect.value;
-    populateAiportsList(FIRselect.value);
+    populateAiportsList(FIRselect.value, paths);
 })
 
 airportSelect.addEventListener('change', () => {
@@ -99,13 +92,13 @@ airportSelect.addEventListener('change', () => {
         showNotif({type: 'failure', message: 'No airport entered', duration: 1500});
         return;
     }
-    airportsList = airport.split(',').map(item => item.trim()).filter(item => item !== '');
-    FIRconfigUpdater(FIR, airportsList);
+    let airportsList = airport.split(',').map(item => item.trim()).filter(item => item !== '');
+    FIRconfigUpdater(FIR, airportsList, paths);
     showNotif({type: 'success', message: FIR + ' airports updated', duration: 1500});
 })
 
 resetButton.addEventListener('click', () => {
-    airportsList = [];
+    let airportsList = [];
     if (FIR === 'LFFF') {
         airportsList = ['LFPO', 'LFPG', 'LFPB', 'LFOB', 'LFQQ'];
     } else if (FIR === 'LFBB') {
@@ -115,9 +108,9 @@ resetButton.addEventListener('click', () => {
     } else if (FIR === 'has4runways') {
         airportsList = ['LFPG'];
     }
-    FIRconfigUpdater(FIR, airportsList);
+    FIRconfigUpdater(FIR, airportsList, paths);
     showNotif({type: 'success', message: FIR + ' airports reset', duration: 1500});
-    populateAiportsList(FIR);
+    populateAiportsList(FIR, paths);
 })
 
 document.getElementById('minimize-window').addEventListener('click', () => {
