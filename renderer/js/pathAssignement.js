@@ -1,5 +1,7 @@
 const rwydataIndicator = document.querySelector('#rwydata');
 const configIndicator = document.querySelector('#config');
+const rwyFileButton = document.querySelector('#rwyButton')
+
 
 let isPackaged = false;
 
