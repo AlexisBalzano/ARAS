@@ -13,48 +13,50 @@
             <h2 id="title">Settings</h2>
         </div>
         <form class="dataform">
-            <div class="inputgroup">
-                <label for="">OACI: </label>
-                <input name="oaci" type="text" maxlength="4"/>
+            <div class="inputgroup" id="oacigroup">
+                <label for="oaci">OACI: </label>
+                <input id="oaci" name="oaci" type="text" maxlength="4"/>
             </div>
             <div class="runwayinfo">
+                <h3>Runway 1:</h3>
                 <div class="inputgroup">
-                    <label for="">Heading: </label>
-                    <input name="heading" type="number"/>
+                    <label for="heading">Heading: </label>
+                    <input id="heading" name="heading" type="number"/>
                 </div>
                 <div class="inputgroup">
-                    <label for="">Preferential: </label>
-                    <input name="preferential" type="number"/>
+                    <label for="preferential">Preferential: </label>
+                    <input id="preferential" name="preferential" type="number"/>
                 </div>
                 <div class="inputgroup">
-                    <label for="">Departure: </label>
-                    <input name="departure" type="text"/>
+                    <label for="departure">Departure: </label>
+                    <input id="departure" name="departure" type="text"/>
                 </div>
                 <div class="inputgroup">
-                    <label for="">Arrival: </label>
-                    <input name="arrival" type="text"/>
+                    <label for="arrival">Arrival: </label>
+                    <input id="arrival" name="arrival" type="text"/>
                 </div>
             </div>
             <div class="runwayinfo">
+                <h3>Runway 2:</h3>
                 <div class="inputgroup">
-                    <label for="">Heading: </label>
-                    <input name="heading" type="number"/>
+                    <label for="heading2">Heading: </label>
+                    <input id="heading2" name="heading" type="number"/>
                 </div>
                 <div class="inputgroup">
-                    <label for="">Preferential: </label>
-                    <input name="preferential" type="number"/>
+                    <label for="preferential2">Preferential: </label>
+                    <input id="preferential2" name="preferential" type="number"/>
                 </div>
                 <div class="inputgroup">
-                    <label for="">Departure: </label>
-                    <input name="departure" type="text"/>
+                    <label for="departure2">Departure: </label>
+                    <input id="departure2" name="departure" type="text"/>
                 </div>
                 <div class="inputgroup">
-                    <label for="">Arrival: </label>
-                    <input name="arrival" type="text"/>
+                    <label for="arrival2">Arrival: </label>
+                    <input id="arrival2" name="arrival" type="text"/>
                 </div>
             </div>
-            <div class="inputgroup">
-                <label for="">Has 4 runways: </label>
+            <div class="inputgroup" id="has4runwaygroup">
+                <label for="has4runwaycheck">Has 4 runways [SOON]: </label>
                 <input id="has4runwaycheck" name="has4runways" type="checkbox" value="true">
             </div>
             <input id="submitbutton" type="submit" value="Update Data"/>
