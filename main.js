@@ -10,10 +10,11 @@ const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
 
 
-// require('electron-reload')(__dirname, {
-//     // Optional: Use Electron's built-in hard reset to reload the whole app (not just the renderer process)
-//     electron: require(`${__dirname}/node_modules/electron`)
-// });
+require('electron-reload')(__dirname, {
+    // Optional: Use Electron's built-in hard reset to reload the whole app (not just the renderer process)
+    electron: require(`${__dirname}/node_modules/electron`),
+    ignored: /config|.*\.rwy/
+});
 
 const appPath = app.getAppPath();
 let userPreferencePath;
