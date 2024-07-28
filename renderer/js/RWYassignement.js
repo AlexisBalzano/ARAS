@@ -5,7 +5,7 @@ const tokenStatus = document.querySelector('#tokenStatus');
 
 // ARAS code
 let token;
-export async function ARAS(FIR, configPath, rwyPath, showNotif, clearNotif, createDefaultConfig, tokenValid, fs) {
+export async function ARAS(FIR, paths, showNotif, clearNotif, createDefaultConfig, tokenValid, fs) {
 
 
     let LFFF = [];
@@ -36,7 +36,7 @@ export async function ARAS(FIR, configPath, rwyPath, showNotif, clearNotif, crea
 
     function getRwyData(oaci){
         try {
-            const data = fs.readFileSync(rwyPath, 'utf8');
+            const data = fs.readFileSync(paths.rwyPath, 'utf8');
             return JSON.parse(data);
         } catch (err) {
             console.error(err);
@@ -124,12 +124,12 @@ export async function ARAS(FIR, configPath, rwyPath, showNotif, clearNotif, crea
     
     let configIsOkay = true;
     function testRequirements() {
-        if (fs.existsSync(configPath)) {
-            if (fs.statSync(configPath).size === 0) {
+        if (fs.existsSync(paths.configPath)) {
+            if (fs.statSync(paths.configPath).size === 0) {
                 console.log('config.json is empty.\nCreating default config.');
-                createDefaultConfig(configPath);
+                createDefaultConfig(paths.configPath);
             }
-            const path = JSON.parse(fs.readFileSync(configPath, 'utf8')).outputPath;
+            const path = JSON.parse(fs.readFileSync(paths.configPath, 'utf8')).outputPath;
             if (path !== null) {
                 outputPath = path;
                 rwyFileButton.style.backgroundColor = 'green';
@@ -154,7 +154,7 @@ export async function ARAS(FIR, configPath, rwyPath, showNotif, clearNotif, crea
         } else {
             
             console.log('config.json not found.\nCreating default config.');
-            createDefaultConfig(configPath);
+            createDefaultConfig(paths.configPath);
             showNotif({type: 'failure', message: 'config.json not found. Creating default config.', duration: 1500});
             return;
             
@@ -216,7 +216,7 @@ export async function ARAS(FIR, configPath, rwyPath, showNotif, clearNotif, crea
         }
     }
 
-    let config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    let config = JSON.parse(fs.readFileSync(paths.configPath, 'utf8'));
     config.tokenValidity = false;
     
     testRequirements()
@@ -239,10 +239,10 @@ export async function ARAS(FIR, configPath, rwyPath, showNotif, clearNotif, crea
     
     if(isOkay) {
         config.tokenValidity = true;
-        fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-        tokenValid(configPath);
+        fs.writeFileSync(paths.configPath, JSON.stringify(config, null, 2));
+        tokenValid(paths.configPath);
     } else {
-        fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+        fs.writeFileSync(paths.configPath, JSON.stringify(config, null, 2));
         return;
     }
 }
