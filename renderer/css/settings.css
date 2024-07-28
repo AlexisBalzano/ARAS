@@ -16,6 +16,9 @@ html, body {
     background-color: var(--background-color);
     cursor: default;
     position: relative;
+    max-height: 500px;
+    max-width: 600px;
+    /* overflow: hidden; */
 }
 
 .container {
@@ -29,24 +32,34 @@ html, body {
 
 
 #title {
+    margin-top: 2px;
     position: relative;
     font-family: var(--font-family);
     color: var(--white);
     font-size: 40px;
     margin-left: 50%;
     transform: translate(-25%, 0);
+    width: 50%;
 }
 
 .dataform {
     font-family: var(--font-family);
     color: var(--white);
-    font-size: 18px;
+    font-size: 14px;
     display: flex;
     flex-direction: column;
     justify-content: left;
     position: relative;
-    margin-top: 0%;
+    margin-top: -5%;
     margin-left: 10%;
+    width: 90%;
+}
+
+.runwayinfo {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 20px;
 }
 
 .inputgroup {
@@ -58,12 +71,23 @@ html, body {
 }
 
 input {
-    flex-grow: 1;
     padding: 6px;
     margin-top: 10px;
     border-radius: 10px;
     border: 1px solid black;
     font-size: 11px;
+}
+
+input[type="text"], input[type="number"] {
+    width: 30px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 label {
@@ -75,8 +99,9 @@ label {
 #has4runwaycheck {
     cursor: pointer;
     position: relative;
+    margin-top: 30px;
     left: -32%;
-    top: -2px;
+    top: -13px;
 }
 
 #submitbutton {
@@ -87,8 +112,8 @@ label {
     border-radius: 7px;
     font-size: 17px;
     cursor: pointer;
-    width: 54%;
-    margin-left: 26%;
+    width: 90%;
+    margin-left: 0%;
 }
 
 #submitbutton:hover {
