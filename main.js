@@ -80,10 +80,6 @@ function createSettingWindow() {
 app.whenReady().then(() => {
     createMainWindow();
 
-    //Implement menu
-    const mainMenu = Menu.buildFromTemplate(menu);
-    Menu.setApplicationMenu(mainMenu)
-    
     ipcMain.on('minimize-window', () => mainWindow.minimize());
 
     ipcMain.on('close-window', () => mainWindow.close());
