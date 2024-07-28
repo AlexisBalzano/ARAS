@@ -19,12 +19,11 @@ const appPath = app.getAppPath();
 let userPreferencePath;
 let coordinates;
 
-if(isPackaged) {
-    coordinates = [450, 350];
-} else {
-    userPreferencePath = path.join(appPath, 'config', 'userPreference.json');
-    coordinates = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8')).coordinates;
-}
+
+coordinates = [450, 350];
+userPreferencePath = path.join(appPath, 'config', 'userPreference.json');
+coordinates = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8')).coordinates;
+
 
 if(coordinates === undefined) {
     coordinates = [450, 350]
@@ -91,14 +90,14 @@ app.whenReady().then(() => {
 
     //Remove mainWindow from memory on close
     mainWindow.on('closed', () => (mainWindow = null));
-    if(isPackaged) {
-        mainWindow.on('moved', () => {
-            let coordo = mainWindow.getPosition();
-            let userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
-            userPreference.coordinates = coordo;
-            fs.writeFileSync(userPreferencePath, JSON.stringify(userPreference));
-        });
-    }
+    
+    mainWindow.on('moved', () => {
+        let coordo = mainWindow.getPosition();
+        let userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
+        userPreference.coordinates = coordo;
+        fs.writeFileSync(userPreferencePath, JSON.stringify(userPreference));
+    });
+    
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
