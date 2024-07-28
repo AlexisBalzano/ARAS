@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self'"/> -->
     <link rel="stylesheet" href="style.css" />
-    <script src="renderer.js" defer></script>
+    <script type="module" src="./js/renderer.js"></script>
     <title>Automatic Runway Assignement System</title>
 </head>
 <body>
@@ -17,6 +17,19 @@
             <button id="close-window">X</button>
         </div>
     </div>
+
+    <div class="notifications">
+        <div class="success">
+            <h3>[SUCCESS]</h3>
+        </div>
+        <div class="failure">
+            <h3>[Failure]</h3>
+        </div>
+        <div class="processing">
+            <h3>[Processing]</h3>
+        </div>
+    </div>
+
     <div id="status">
         <h2>Status:</h2>
         <h4 class="statusIndicators" id="rwydata" title="rwydata.json not found">rwydata.json</h4>
