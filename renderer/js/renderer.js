@@ -25,14 +25,12 @@ let paths = {
 window.openReadme = openReadme;
 
 
-
 window.onload = async function () {
     await pathAssignement(paths, tokenValid, createDefaultConfig);
     setTimeout(() => {
     populateAiportsList('LFFF', paths);
     }, 1000);
 };
-
 
 
 window.loadRwyfile = function () {
@@ -56,6 +54,7 @@ window.loadRwyfile = function () {
     });
 }
 
+
 window.ARAS = async function (FIR) {
     ARASimport(FIR, paths, showNotif, clearNotif, createDefaultConfig, tokenValid, fs);
 }
@@ -66,7 +65,6 @@ window.ARAS = async function (FIR) {
 
 
 //Listeners
-
 APItoken.addEventListener('change', () => {
     const token = APItoken.value;
     const config = JSON.parse(fs.readFileSync(paths.configPath, 'utf8'));
