@@ -103,28 +103,6 @@ app.whenReady().then(() => {
     })
 });
 
-// Menu Template
-const menu = [
-    ...(isMac ? [{
-        label: app.name,
-    }] : []),
-    {
-        label: 'File',
-        submenu: [
-            {
-                label: 'Setting',
-                click: createSettingWindow,
-                accelerator: 'CmdOrCtrl+P'
-            },
-            {
-                label: 'Quit',
-                accelerator: 'CmdOrCtrl+W',
-                click: () => app.quit()
-            }
-        ]
-    }
-]
-
 
 app.on('window-all-closed', () => {
     if (!isMac) {
