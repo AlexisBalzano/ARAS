@@ -1,0 +1,97 @@
+/* Global variable */
+:root {
+    --font-family: arial, sans-serif;
+    --background-color: rgb(82, 82, 82);
+    --widget-color: rgb(73, 73, 73);
+    --white: rgb(214, 214, 214);
+    --green: rgb(36, 139, 36);
+    --red: rgb(211, 13, 13);
+}
+
+html, body {
+    margin: 0;
+    padding: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-color);
+    cursor: default;
+    position: relative;
+}
+
+.container {
+    display: block;
+    position: relative;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+
+
+#title {
+    position: relative;
+    font-family: var(--font-family);
+    color: var(--white);
+    font-size: 40px;
+    margin-left: 50%;
+    transform: translate(-25%, 0);
+}
+
+.dataform {
+    font-family: var(--font-family);
+    color: var(--white);
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    position: relative;
+    margin-top: 0%;
+    margin-left: 10%;
+}
+
+.inputgroup {
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+}
+
+input {
+    flex-grow: 1;
+    padding: 6px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+    font-size: 11px;
+}
+
+label {
+    width: 30%;
+    text-align: right;
+    margin-right: 10px;
+}
+
+#has4runwaycheck {
+    cursor: pointer;
+    position: relative;
+    left: -32%;
+    top: -2px;
+}
+
+#submitbutton {
+    background-color: rgb(78, 148, 214);
+    color: aliceblue;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: 7px;
+    font-size: 17px;
+    cursor: pointer;
+    width: 54%;
+    margin-left: 26%;
+}
+
+#submitbutton:hover {
+    background-color: yellow;
+    color: black;
+}

@@ -4,8 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings</title>
+    <script src="./js/settings.js"></script>
+    <link rel="stylesheet" href="./css/settings.css">
 </head>
 <body>
-    settings
+    <div class="container">
+        <div class="titleDiv">
+            <h2 id="title">Settings</h2>
+        </div>
+        <form class="dataform">
+            <div class="inputgroup">
+                <label for="">OACI: </label>
+                <input name="oaci" type="text"/>
+            </div>
+            <div class="inputgroup">
+                <label for="">Heading: </label>
+                <input name="heading" type="number"/>
+            </div>
+            <div class="inputgroup">
+                <label for="">Preferential: </label>
+                <input name="preferential" type="number"/>
+            </div>
+            <div class="inputgroup">
+                <label for="">Departure: </label>
+                <input name="departure" type="text"/>
+            </div>
+            <div class="inputgroup">
+                <label for="">Arrival: </label>
+                <input name="arrival" type="text"/>
+            </div>
+            <div class="inputgroup">
+                <label for="">Has 4 runways: </label>
+                <input id="has4runwaycheck" name="has4runways" type="checkbox" value="true">
+            </div>
+            <input id="submitbutton" type="submit" value="Submit"/>
+        </form>
+    </div>
 </body>
 </html>
