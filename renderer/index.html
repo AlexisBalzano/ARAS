@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self'"/> -->
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="./js/renderer.js"></script>
     <title>Automatic Runway Assignement System</title>
@@ -57,7 +56,15 @@
         <button class="FIRbutton button" id="LFFF" onclick="ARAS('LFFF')">LFFF</button>
         <button class="FIRbutton button" id="LFBB" onclick="ARAS('LFBB')">LFBB</button>
         <button class="FIRbutton button" id="LFMM" onclick="ARAS('LFMM')">LFMM</button>
+    </div>
+    <div class="setting">
         <button class="FIRbutton button" id="readme" onclick="openReadme()">Readme</button>
+        <button class="settingButton button" onclick="openSettings()">Settings</button>
+        <script>
+            function openSettings() {
+                ipcRenderer.send('open-settings-window');
+            }
+        </script>
     </div>
 </body>
 </html>

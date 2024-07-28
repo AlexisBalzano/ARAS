@@ -240,7 +240,7 @@ h2 {
     align-items: center;
     position: relative;
     background-color: var(--widget-color);
-    margin-bottom: 40px;
+    margin-bottom: 50px;
 }
 
 #FIRairportsTitle {
@@ -328,11 +328,17 @@ h2 {
 
 #readme {
     background-color: var(--green);
-    margin-left: 40px;
+    /* margin-left: 20px; */
     color: white;
 }
 
 #readme:hover {
     background-color: rgb(52, 255, 52);
     color: black;
+}
+
+.setting {
+    display: block;
+    position: absolute;
+    left: 4%;
 }

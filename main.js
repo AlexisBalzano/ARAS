@@ -61,9 +61,15 @@ function createMainWindow() {
     mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
 }
 
+let settingWindow;
 // Create Setting window
 function createSettingWindow() {
-    const settingWindow = new BrowserWindow({
+    if(settingWindow) {
+        settingWindow.restore();
+        return;
+    }
+
+    settingWindow = new BrowserWindow({
         resizable: false,
         title: 'SETTING',
         icon: path.join(__dirname, 'build-assets/setting.png'),
@@ -74,6 +80,10 @@ function createSettingWindow() {
     settingWindow.setMenuBarVisibility(null);
     settingWindow.setAlwaysOnTop(true);
     settingWindow.loadFile(path.join(__dirname, './renderer/setting.html'));
+
+    settingWindow.on('closed', () => {
+        settingWindow = null;
+    })
 }
 
 
@@ -84,6 +94,10 @@ app.whenReady().then(() => {
     ipcMain.on('minimize-window', () => mainWindow.minimize());
 
     ipcMain.on('close-window', () => mainWindow.close());
+
+    ipcMain.on('open-settings-window', () => {
+        createSettingWindow();
+    });
 
     //Remove mainWindow from memory on close
     mainWindow.on('closed', () => (mainWindow = null));
