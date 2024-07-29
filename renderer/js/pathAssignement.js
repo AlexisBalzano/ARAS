@@ -1,4 +1,5 @@
 import { showNotif } from './notification.js';
+import { openReadme } from './fileManager.js';
 
 const rwydataIndicator = document.getElementById('rwydata');
 const configIndicator = document.getElementById('config');
@@ -72,6 +73,9 @@ export async function pathAssignement(paths, tokenValid, createDefaultConfig) {
             checkStatus(paths, tokenValid, createDefaultConfig);
             return;
         });
+        setTimeout(() => {
+            openReadme();
+        }, 2000);
     } else {
         checkStatus(paths, tokenValid, createDefaultConfig);
     }
