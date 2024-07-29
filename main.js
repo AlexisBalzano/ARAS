@@ -11,11 +11,11 @@ const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
 
 
-require('electron-reload')(__dirname, {
-    // Optional: Use Electron's built-in hard reset to reload the whole app (not just the renderer process)
-    electron: require(`${__dirname}/node_modules/electron`),
-    ignored: /config|.*\.rwy/
-});
+// require('electron-reload')(__dirname, {
+//     // Optional: Use Electron's built-in hard reset to reload the whole app (not just the renderer process)
+//     electron: require(`${__dirname}/node_modules/electron`),
+//     ignored: /config|.*\.rwy/
+// });
 
 const appPath = app.getAppPath();
 
@@ -23,6 +23,7 @@ let statusChecked = false;
 let userPreferencePath;
 let mainCoordinates;
 let settingCoordinates;
+
 
 function getCoordinates(key) {
     let defaultCoordinates = [450, 350];
@@ -58,6 +59,11 @@ function createSplashWindow(width, height) {
         transparent: true,
         title: 'Splash Screen',
         icon: path.join(__dirname, './build-assets/icon.png'),
+        webPreferences: {
+            contextIsolation: true,
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'preload.js')
+        }
     });
 
     splashWindow.loadFile(path.join(__dirname, './renderer/html/splash.html'));
@@ -228,17 +234,19 @@ ipcMain.on('send-rwypath', (event, path) => {
 
 ipcMain.on('status-checked', () => {
     statusChecked = true;
-    if (isDev) {
-        if(mainWindow.webContents.isDevToolsOpened()) {
-            showMainWindow()
+    setTimeout(() => {
+        if (isDev) {
+            if(mainWindow.webContents.isDevToolsOpened()) {
+                showMainWindow()
+            } else {
+                mainWindow.webContents.on('devtools-opened', () => {
+                    showMainWindow();
+                });
+            }
         } else {
-            mainWindow.webContents.on('devtools-opened', () => {
-                showMainWindow();
-            });
+            showMainWindow();
         }
-    } else {
-        showMainWindow();
-    }
+    }, 1500);
 });
 
 
@@ -247,3 +255,9 @@ setTimeout(() => {
         showMainWindow();
     }
 }, 6000);
+
+let imagePath = path.join(__dirname, '../build-assets/icon.png');
+
+ipcMain.on('get-image-path', (event) => {
+    event.sender.send('image-path', imagePath);
+});
