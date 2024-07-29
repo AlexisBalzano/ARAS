@@ -4,7 +4,7 @@ const path = require('path')
 const { BrowserWindow, ipcMain, dialog, app } = require('electron');
 const fs = require('fs');
 
-process.env.NODE_ENV = 'production';
+// process.env.NODE_ENV = 'production';
 isPackaged = true;
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -101,7 +101,12 @@ function createMainWindow() {
     mainWindow.loadFile(path.join(__dirname, './renderer/html/index.html'));
     
     //Remove mainWindow from memory on close
-    mainWindow.on('closed', () => (mainWindow = null));
+    mainWindow.on('closed', () => {
+        mainWindow = null
+        if(settingWindow) {
+            settingWindow.close();
+        }
+    });
     mainWindow.on('moved', () => {
         let coordo = mainWindow.getPosition();
         let userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));

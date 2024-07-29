@@ -1,9 +1,20 @@
 import { showNotif, clearNotif } from "./notification.js";
 
+const heading1 = document.getElementById('heading');
+const preferential1 = document.getElementById('preferential');
+const departure1 = document.getElementById('departure');
+const arrival1 = document.getElementById('arrival');
+const heading2 = document.getElementById('heading2');
+const preferential2 = document.getElementById('preferential2');
+const departure2 = document.getElementById('departure2');
+const arrival2 = document.getElementById('arrival2');
+const has4runways = document.getElementById('has4runwaycheck');
 const form = document.getElementsByClassName('dataform')[0];
+
 let data;
 let rwypath;
 let newInput = {};
+let isModifiable = false;
 
 
 form.addEventListener('submit', async (event) => {
@@ -17,19 +28,26 @@ form.addEventListener('submit', async (event) => {
     }
     rwypath = await getRwyPath();
     let rwydata = JSON.parse(fs.readFileSync(rwypath, 'utf8'));
+    if(rwydata[oaci] && !isModifiable) {
+        isModifiable = true;
+        populateFields(rwydata[oaci]);
+        let notif = showNotif({type: 'failure', message: 'This airport is already in the database', duration: 0});
+        setTimeout(() => {
+            clearNotif(notif);
+            showNotif({type: 'processing', message: 'You can now modify the data', duration: 2000});
+        }, 1500);
+
+        return;
+    }
+    
+    
     try {
         createNewInput(data);
     } catch (err) {
         return;
     }
-    if(rwydata[oaci]){
-        //TODO: get airport data to prefill the form and so that the user can modify the entry
-        showNotif({type: 'failure', message: 'This airport is already in the database', duration: 2000});
-        return;
-    }
     
-    
-    
+
     rwydata[oaci] = newInput;
     
     //TODO: adapt code to accomodate 4 runways airports
@@ -38,7 +56,14 @@ form.addEventListener('submit', async (event) => {
     } catch (err) {
         showNotif({type: 'failure', message: 'An error occured when saving to file', duration: 3000});
     }
-    showNotif({type: 'success', message: oaci + ' added to database', duration: 2000});
+    if(isModifiable) {
+        showNotif({type: 'success', message: oaci + ' has been modified successfully', duration: 2000});
+        form.reset();
+    } else {
+        showNotif({type: 'success', message: oaci + ' added to database', duration: 2000});
+        form.reset();
+    }
+    isModifiable = false;
 });
 
 async function getRwyPath(){
@@ -62,7 +87,8 @@ function createNewInput(data){
     }
     
     try {
-        keysToCopyRunway1.forEach(key => {
+        for (let i = 0; i < keysToCopyRunway1.length; i++) {
+            let key = keysToCopyRunway1[i];
             let value = data[key];
             if(value == '') {
                 showNotif({type: 'failure', message: 'All fields must be filled', duration: 2000});
@@ -73,27 +99,39 @@ function createNewInput(data){
             } else {
                 newInput["runways"]["1"][key.slice(0,-1)] = value;
             }
-        })
+        }
     } catch (err) {
         throw new Error('');
     }
     
     try {
-        keysToCopyRunway2.forEach(key => {
+        for (let i = 0; i < keysToCopyRunway2.length; i++) {
+            let key = keysToCopyRunway2[i];
             let value = data[key];
             if(value == '') {
                 showNotif({type: 'failure', message: 'All fields must be filled', duration: 2000});
-                return;
+                throw new Error('');
             }
             if(key == 'heading2' || key == 'preferential2') {
                 newInput["runways"]["2"][key.slice(0,-1)] = parseInt(value);
             } else {
                 newInput["runways"]["2"][key.slice(0,-1)] = value;
             }
-        })
+        }
     } catch (err) {
         throw new Error('');
     }
+}
+
+function populateFields(oaciData) {
+    heading1.value = oaciData["runways"]["1"]["heading"];
+    preferential1.value = oaciData["runways"]["1"]["preferential"];
+    departure1.value = oaciData["runways"]["1"]["departure"];
+    arrival1.value = oaciData["runways"]["1"]["arrival"];
+    heading2.value = oaciData["runways"]["2"]["heading"];
+    preferential2.value = oaciData["runways"]["2"]["preferential"];
+    departure2.value = oaciData["runways"]["2"]["departure"];
+    arrival2.value = oaciData["runways"]["2"]["arrival"];
 }
 
 document.getElementById('closebutton').addEventListener('click', () => {

@@ -35,50 +35,50 @@
         </div>
         <form class="dataform">
             <div class="inputgroup" id="oacigroup">
-                <label for="oaci">OACI: </label>
-                <input id="oaci" name="oaci" type="text" maxlength="4"/>
+                <label for="ICAO">OACI: </label>
+                <input id="oaci" name="oaci" type="text" maxlength="4" title="ICAO of the airport"/>
             </div>
             <div class="runwayinfo">
                 <h3>Runway 1:</h3>
                 <div class="inputgroup">
                     <label for="heading">Heading: </label>
-                    <input id="heading" name="heading1" type="number" max="360"/>
+                    <input id="heading" name="heading1" type="number" max="360" title="Heading in degrees"/>
                 </div>
                 <div class="inputgroup">
                     <label for="preferential">Preferential: </label>
-                    <input id="preferential" name="preferential1" type="number" max="19"/>
+                    <input id="preferential" name="preferential1" type="number" max="19" title="Max acceptable tailwind component (only 1 of the runways)"/>
                 </div>
                 <div class="inputgroup">
                     <label for="departure">Departure: </label>
-                    <input id="departure" name="departure1" type="text" maxlength="3"/>
+                    <input id="departure" name="departure1" type="text" maxlength="3" title="Name of the departure runway (ex: 34L)"/>
                 </div>
                 <div class="inputgroup">
                     <label for="arrival">Arrival: </label>
-                    <input id="arrival" name="arrival1" type="text" maxlength="3"/>
+                    <input id="arrival" name="arrival1" type="text" maxlength="3" title="Name of the arrival runway (ex: 34R) can be the same as departure"/>
                 </div>
             </div>
             <div class="runwayinfo">
                 <h3>Runway 2:</h3>
                 <div class="inputgroup">
                     <label for="heading2">Heading: </label>
-                    <input id="heading2" name="heading2" type="number" max="360"/>
+                    <input id="heading2" name="heading2" type="number" max="360" title="Heading in degrees"/>
                 </div>
                 <div class="inputgroup">
                     <label for="preferential2">Preferential: </label>
-                    <input id="preferential2" name="preferential2" type="number" max="19"/>
+                    <input id="preferential2" name="preferential2" type="number" max="19" title="Max acceptable tailwind component (only 1 of the runways)"/>
                 </div>
                 <div class="inputgroup">
                     <label for="departure2">Departure: </label>
-                    <input id="departure2" name="departure2" type="text" maxlength="3"/>
+                    <input id="departure2" name="departure2" type="text" maxlength="3" title="Name of the departure runway (ex: 34L)"/>
                 </div>
                 <div class="inputgroup">
                     <label for="arrival2">Arrival: </label>
-                    <input id="arrival2" name="arrival2" type="text" maxlength="3"/>
+                    <input id="arrival2" name="arrival2" type="text" maxlength="3" title="Name of the arrival runway (ex: 34R) can be the same as departure"/>
                 </div>
             </div>
             <div class="inputgroup" id="has4runwaygroup">
                 <label for="has4runwaycheck">Has 4 runways [SOON]: </label>
-                <input id="has4runwaycheck" name="has4runways" type="checkbox" value="true">
+                <input id="has4runwaycheck" name="has4runways" type="checkbox" value="true" title="Select if the airport has 4 runways [see ReadMe]">
             </div>
             <input class="button" id="submitbutton" type="submit" value="Update Data"/>
         </form>
