@@ -4,7 +4,7 @@ const path = require('path')
 const { BrowserWindow, ipcMain, dialog, app } = require('electron');
 const fs = require('fs');
 
-// process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'production';
 isPackaged = true;
 
 const isDev = process.env.NODE_ENV !== 'production';
