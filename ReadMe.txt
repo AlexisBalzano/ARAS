@@ -1,4 +1,4 @@
-# Automatic Runway Assignement System v3.0.0
+# Automatic Runway Assignement System v3.5.0
 
 ## Introduction
 This software is used to assign automatically euroscope runways according to a database referencing preferential runway as well as using real-time weather data.
@@ -30,6 +30,18 @@ Note: if you are adding unsopported ICAO, you will need to also add them using t
       Unless specified in the update, you can keep your settings, to do so, proceed as follow:
       Before reinstalling ARAS, make sure to save both rwydata.json & config.json in an other folder, 
       after the reinstall, launch ARAS, it will create those 2 files back, you can replace them with your old config.
+
+
+##Changelog
+
+v3.5.0 Addition of Setting window + Minor UI rework
+      - Addition of setting window making the user able to add/modify airports' runway data via the interface
+      - Addition of a loading screen as well as an error screen if backend happens to fail (unlikely but if occurs, send me a message)
+
+
+v3.0.0 Major UI update :
+      - new dark themed sober interface & refined controls
+
 
 
 ## Author
