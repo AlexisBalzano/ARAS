@@ -1,4 +1,4 @@
-# Automatic Runway Assignement System v2.0.0
+# Automatic Runway Assignement System v3.0.0
 
 ## Introduction
 This software is used to assign automatically euroscope runways according to a database referencing preferential runway as well as using real-time weather data.
@@ -23,10 +23,9 @@ The FIR Airports menu let you customise which airport are being assigned when cl
 To modify the default list, select the FIR in the dropdown menu, then, the list of current auto-assigned airport will show in the textfield next to it.
 Modify this list with ICAO codes separated by comma. You can then add or remove airports according to your requirements.
 Clicking the reset button will revert to default list of airports for the currently selected FIR.
-Note: if you are adding unsopported ICAO, you will need to modify the rwydata.json file to populate data for this specific ICAO.
-      this file is located inside the ARAS program folder in your Documents folder /ARAS
-      Copy the syntax and add the custom ICAOs.
-      the has4runway "FIR" is used to define airports equipped with 2 departures runways as well as 2 arrival one. Edit this list the same way as the others.
+Note: if you are adding unsopported ICAO, you will need to also add them using the Settings Window
+      the has4runway "FIR" is used to define airports equipped with 2 departures runways as well as 2 arrival one. Edit this list the same way as the others
+      using a texteditor on Documents/ARAS/rwydata.
 
 
 ## Author

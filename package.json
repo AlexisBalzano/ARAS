@@ -1,7 +1,7 @@
 {
   "name": "aras",
   "productName": "ARAS",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Automatically assign euroscope runways according to actual weather",
   "main": "main.js",
   "scripts": {
@@ -21,6 +21,21 @@
   },
   "build": {
     "appId": "com.AlexisBalzano.ARAS",
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "./build-assets/icon.ico",
+      "uninstallerIcon": "./build-assets/icon.ico",
+      "installerHeaderIcon": "./build-assets/icon.ico",
+      "uninstallDisplayName": "ARAS",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
     "files": [
       "**/*",
       "!./build-assets",
