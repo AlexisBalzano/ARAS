@@ -80,19 +80,9 @@
                 <label for="has4runwaycheck">Has 4 runways [SOON]: </label>
                 <input id="has4runwaycheck" name="has4runways" type="checkbox" value="true">
             </div>
-            <input id="submitbutton" type="submit" value="Update Data"/>
+            <input class="button" id="submitbutton" type="submit" value="Update Data"/>
         </form>
+        <button class="button" id="closebutton">Close</button>
     </div>
-    <!-- <script>
-        const form = document.querySelector('.dataform');
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            console.log('Form submitted');
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
-            console.log(data);
-        });
-    </script> -->
 </body>
 </html>

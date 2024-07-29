@@ -45,7 +45,6 @@ export function createDefaultConfig(configPath){
             return;
         }
     });
-    pathAssignement();
 }
 
 export async function tokenValid(configPath) {

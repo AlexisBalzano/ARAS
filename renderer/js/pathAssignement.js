@@ -1,3 +1,5 @@
+import { showNotif } from './notification.js';
+
 const rwydataIndicator = document.querySelector('#rwydata');
 const configIndicator = document.querySelector('#config');
 const rwyFileButton = document.querySelector('#rwyButton')
@@ -60,7 +62,7 @@ export async function pathAssignement(paths, tokenValid, createDefaultConfig) {
         
         createDefaultConfig(paths.configPath);
         
-        tempPath = await window.electron.getAppPath();
+        let tempPath = await window.electron.getAppPath();
         fs.copyFile( path.join(tempPath, '..', 'config', 'rwydata.json'), path.join(paths.rwyPath, '..', 'rwydata.json'), (err) => {
             if (err) {
                 console.error(err);

@@ -71,3 +71,16 @@ function createNewInput(data){
         }
     })
 }
+
+document.getElementById('closebutton').addEventListener('click', () => {
+    ipcRenderer.send('close-setting-window');
+})
+
+//event listener
+document.getElementById('minimize-window').addEventListener('click', () => {
+    ipcRenderer.send('minimize-setting-window');
+});
+
+document.getElementById('close-window').addEventListener('click', () => {
+    ipcRenderer.send('close-setting-window');
+});

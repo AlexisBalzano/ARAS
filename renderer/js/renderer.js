@@ -27,7 +27,7 @@ window.openReadme = openReadme;
 
 
 window.onload = async function () {
-    await pathAssignement(paths, tokenValid, createDefaultConfig);
+    await pathAssignement(paths, tokenValid, createDefaultConfig, showNotif);
     setTimeout(() => {
     populateAiportsList('LFFF', paths);
     }, 1000);
@@ -113,11 +113,11 @@ resetButton.addEventListener('click', () => {
 })
 
 document.getElementById('minimize-window').addEventListener('click', () => {
-    ipcRenderer.send('minimize-window');
+    ipcRenderer.send('minimize-main-window');
 });
 
 document.getElementById('close-window').addEventListener('click', () => {
-    ipcRenderer.send('close-window');
+    ipcRenderer.send('close-main-window');
 });
 
 ipcRenderer.on('request-rwypath', () => {

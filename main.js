@@ -17,28 +17,34 @@ require('electron-reload')(__dirname, {
 });
 
 const appPath = app.getAppPath();
+
 let userPreferencePath;
-let coordinates;
+let mainCoordinates;
+let settingCoordinates;
 
-
-coordinates = [450, 350];
-userPreferencePath = path.join(appPath, 'config', 'userPreference.json');
-coordinates = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8')).coordinates;
-
-
-if(coordinates === undefined) {
-    coordinates = [450, 350]
+function getCoordinates(key) {
+    let defaultCoordinates = [450, 350];
+    userPreferencePath = path.join(appPath, 'config', 'userPreference.json');
+    let coordinates = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'))[key];
+    if(coordinates === undefined) {
+        coordinates = defaultCoordinates;
+    }
+    return coordinates;
 }
+
+
+
+
 
 let mainWindow;
 
 // Create the main window
 function createMainWindow() {
-
+    mainCoordinates = getCoordinates('mainCoordinates');
 
     mainWindow = new BrowserWindow({
-        x: coordinates[0],
-        y: coordinates[1],
+        x: mainCoordinates[0],
+        y: mainCoordinates[1],
         resizable: false,
         frame: false,
         title: 'Automatic Runway Assisgnement System',
@@ -59,6 +65,16 @@ function createMainWindow() {
     }
     
     mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
+    
+    //Remove mainWindow from memory on close
+    mainWindow.on('closed', () => (mainWindow = null));
+    mainWindow.on('moved', () => {
+        console.log('moved');
+        let coordo = mainWindow.getPosition();
+        let userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
+        userPreference.mainCoordinates = coordo;
+        fs.writeFileSync(userPreferencePath, JSON.stringify(userPreference));
+    });
 }
 
 let settingWindow;
@@ -69,7 +85,11 @@ function createSettingWindow() {
         return;
     }
 
+    settingCoordinates =  getCoordinates('settingCoordinates');
+
     settingWindow = new BrowserWindow({
+        x: settingCoordinates[0],
+        y: settingCoordinates[1],
         resizable: false,
         frame: false,
         title: 'SETTING',
@@ -90,10 +110,15 @@ function createSettingWindow() {
     settingWindow.setMenuBarVisibility(null);
     settingWindow.setAlwaysOnTop(true);
     settingWindow.loadFile(path.join(__dirname, './renderer/setting.html'));
-
-    settingWindow.on('closed', () => {
-        settingWindow = null;
-    })
+    settingWindow.on('closed', () => (settingWindow = null));
+    settingWindow.on('moved', () => {
+        console.log('moved');
+        let coordo = settingWindow.getPosition();
+        let userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
+        userPreference["settingCoordinates"] = coordo;
+        fs.writeFileSync(userPreferencePath, JSON.stringify(userPreference));
+    });
+    
 }
 
 
@@ -101,24 +126,17 @@ function createSettingWindow() {
 app.whenReady().then(() => {
     createMainWindow();
 
-    ipcMain.on('minimize-window', () => mainWindow.minimize());
+    ipcMain.on('minimize-main-window', () => mainWindow.minimize());
 
-    ipcMain.on('close-window', () => mainWindow.close());
+    ipcMain.on('close-main-window', () => mainWindow.close());
+    
+    ipcMain.on('minimize-setting-window', () => settingWindow.minimize());
+
+    ipcMain.on('close-setting-window', () => settingWindow.close());
 
     ipcMain.on('open-settings-window', () => {
         createSettingWindow();
     });
-
-    //Remove mainWindow from memory on close
-    mainWindow.on('closed', () => (mainWindow = null));
-    
-    mainWindow.on('moved', () => {
-        let coordo = mainWindow.getPosition();
-        let userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
-        userPreference.coordinates = coordo;
-        fs.writeFileSync(userPreferencePath, JSON.stringify(userPreference));
-    });
-    
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
