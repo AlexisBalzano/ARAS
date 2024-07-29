@@ -1,5 +1,5 @@
-const rwyFileButton = document.querySelector('#rwyButton')
-const tokenStatus = document.querySelector('#tokenStatus');
+const rwyFileButton = document.getElementById('rwyButton')
+const tokenStatus = document.getElementById('tokenStatus');
 
 
 

@@ -1,8 +1,8 @@
 import { showNotif } from './notification.js';
 
-const rwydataIndicator = document.querySelector('#rwydata');
-const configIndicator = document.querySelector('#config');
-const rwyFileButton = document.querySelector('#rwyButton')
+const rwydataIndicator = document.getElementById('rwydata');
+const configIndicator = document.getElementById('config');
+const rwyFileButton = document.getElementById('rwyButton')
 
 
 let isPackaged = false;

@@ -1,9 +1,9 @@
 //Notifications system
 
-const notifications = document.querySelector('.notifications');
-const notifSuccess = document.querySelector('.success');
-const notifFailure = document.querySelector('.failure');
-const notifProcessing = document.querySelector('.processing');
+const notifications = document.getElementsByClassName('notifications');
+const notifSuccess = document.getElementsByClassName('success');
+const notifFailure = document.getElementsByClassName('failure');
+const notifProcessing = document.getElementsByClassName('processing');
 
 export function showNotif(options) {
     let notif;

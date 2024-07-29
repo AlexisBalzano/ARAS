@@ -1,4 +1,4 @@
-const airportSelect = document.querySelector('#airportSelect');
+const airportSelect = document.getElementById('airportSelect');
 
 
 export function populateAiportsList(FIR, paths) {

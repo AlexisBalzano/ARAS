@@ -4,11 +4,11 @@ import { pathAssignement, setPathPackagedState } from "./pathAssignement.js";
 import { createDefaultConfig, tokenValid, openReadme, setPackageState } from "./fileManager.js";
 import { FIRconfigUpdater, populateAiportsList } from "./DataManager.js";
 
-const rwyFileButton = document.querySelector('#rwyButton')
-const APItoken = document.querySelector('#APItoken');
-const FIRselect = document.querySelector('#FIRselect');
-const airportSelect = document.querySelector('#airportSelect');
-const resetButton = document.querySelector('#resetButton');
+const rwyFileButton = document.getElementById('rwyButton')
+const APItoken = document.getElementById('APItoken');
+const FIRselect = document.getElementById('FIRselect');
+const airportSelect = document.getElementById('airportSelect');
+const resetButton = document.getElementById('resetButton');
 
 
 
