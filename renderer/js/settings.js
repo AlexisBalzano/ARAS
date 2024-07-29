@@ -1,6 +1,6 @@
 import { showNotif, clearNotif } from "./notification.js";
 
-const form = document.getElementsByClassName('dataform');
+const form = document.getElementsByClassName('dataform')[0];
 let data;
 let rwypath;
 let newInput = {};

@@ -5,7 +5,7 @@ const { BrowserWindow, Menu } = require('electron');
 const { ipcMain, dialog, app } = require('electron');
 const fs = require('fs');
 
-// process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'production';
 isPackaged = false;
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -139,21 +139,19 @@ function createSettingWindow() {
     
 }
 
+let userClosed = true;
+
+function showMainWindow() {
+    userClosed = false;
+    splashWindow.destroy();
+    mainWindow.show();
+}
 
 // App is ready
 app.on('ready', () => {
     createMainWindow();
     createSplashWindow(600, 400);
-        
-    mainWindow.webContents.on('did-finish-load', () => {
-        setTimeout(() => {
-            userClosed = false;
-            splashWindow.destroy();
-            mainWindow.show();
-        }, 1000);
-    });
     
-    let userClosed = true;
     splashWindow.on('closed', () => {
         if(userClosed) {
             app.quit();
@@ -202,4 +200,18 @@ ipcMain.on('request-rwypath', () => {
 
 ipcMain.on('send-rwypath', (event, path) => {
     settingWindow.webContents.send('send-rwypath', path);
+});
+
+ipcMain.on('status-checked', () => {
+    if (isDev) {
+        if(mainWindow.webContents.isDevToolsOpened()) {
+            showMainWindow()
+        } else {
+            mainWindow.webContents.on('devtools-opened', () => {
+                showMainWindow();
+            });
+        }
+    } else {
+        showMainWindow();
+    }
 });

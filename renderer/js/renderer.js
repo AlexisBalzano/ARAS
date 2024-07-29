@@ -31,6 +31,7 @@ window.onload = async function () {
     setTimeout(() => {
     populateAiportsList('LFFF', paths);
     }, 1000);
+    ipcRenderer.send('status-checked');
 };
 
 
