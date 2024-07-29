@@ -31,3 +31,4 @@ npm-debug.log.*
 LFXX.rwy
 config/
 config/userPreference.json
+.env
