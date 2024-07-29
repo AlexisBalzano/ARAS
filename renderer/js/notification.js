@@ -1,9 +1,9 @@
 //Notifications system
 
-const notifications = document.getElementsByClassName('notifications');
-const notifSuccess = document.getElementsByClassName('success');
-const notifFailure = document.getElementsByClassName('failure');
-const notifProcessing = document.getElementsByClassName('processing');
+const notifications = document.getElementsByClassName('notifications')[0];
+const notifSuccess = document.getElementsByClassName('success')[0];
+const notifFailure = document.getElementsByClassName('failure')[0];
+const notifProcessing = document.getElementsByClassName('processing')[0];
 
 export function showNotif(options) {
     let notif;
