@@ -15,6 +15,7 @@ let data;
 let rwypath;
 let newInput = {};
 let isModifiable = false;
+let lastOaci = '';
 
 
 form.addEventListener('submit', async (event) => {
@@ -26,16 +27,20 @@ form.addEventListener('submit', async (event) => {
         showNotif({type: 'failure', message: 'OACI code must be 4 characters long', duration: 2000});
         return;
     }
+    if(oaci !== lastOaci) {
+        isModifiable = false;
+    }
     rwypath = await getRwyPath();
     let rwydata = JSON.parse(fs.readFileSync(rwypath, 'utf8'));
     if(rwydata[oaci] && !isModifiable) {
         isModifiable = true;
+        lastOaci = oaci;
         populateFields(rwydata[oaci]);
         let notif = showNotif({type: 'failure', message: 'This airport is already in the database', duration: 0});
         setTimeout(() => {
             clearNotif(notif);
-            showNotif({type: 'processing', message: 'You can now modify the data', duration: 2000});
-        }, 1500);
+            showNotif({type: 'processing', message: 'You can now modify the data', duration: 1500});
+        }, 750);
 
         return;
     }

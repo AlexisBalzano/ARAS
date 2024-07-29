@@ -51,7 +51,7 @@ export async function pathAssignement(paths, tokenValid, createDefaultConfig) {
     }
     
     if (userPreference.isFirstStartUp) {
-        showNotif({type:'processing', message:'First startup detected, creating default config...', duration:1500});
+        showNotif({type:'processing', message:'First startup detected, creating default config...', duration:3000});
         fs.mkdir(path.join(os.homedir(), 'Documents', 'ARAS'), {recursive: true}, (err) => {
             if (err) {
                 console.error(err);
