@@ -32,3 +32,5 @@ LFXX.rwy
 config/
 config/userPreference.json
 .env
+
+/out

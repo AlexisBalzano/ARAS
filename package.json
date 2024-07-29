@@ -3,7 +3,7 @@
   "productName": "ARAS",
   "version": "3.10.0",
   "description": "Automatically assign euroscope runways according to actual weather",
-  "main": "main.js",
+  "main": "./renderer/js/main.js",
   "scripts": {
     "start": "electron .",
     "package": "electron-builder build",
