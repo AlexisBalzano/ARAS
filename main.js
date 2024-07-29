@@ -1,3 +1,5 @@
+require('v8-compile-cache');
+
 const path = require('path')
 const { BrowserWindow, Menu } = require('electron');
 const { ipcMain, dialog, app } = require('electron');
@@ -35,6 +37,22 @@ function getCoordinates(key) {
 
 
 
+let splashWindow;
+function createSplashWindow(width, height) {
+    splashWindow = new BrowserWindow({
+        width: width,
+        height: height,
+        resizable: false,
+        frame: false,
+        show: true,
+        alwaysOnTop: true,
+        transparent: true,
+        title: 'Splash Screen',
+        icon: path.join(__dirname, './build-assets/icon.png'),
+    });
+
+    splashWindow.loadFile(path.join(__dirname, './renderer/html/splash.html'));
+}
 
 let mainWindow;
 
@@ -50,7 +68,8 @@ function createMainWindow() {
         title: 'Automatic Runway Assisgnement System',
         width: isDev ? 1000 : 600,
         height: 400,
-        icon: path.join(__dirname, 'build-assets/icon.png'),
+        show: false,
+        icon: path.join(__dirname, './build-assets/icon.png'),
         webPreferences: {
             contextIsolation: true,
             nodeIntegration: true,
@@ -64,12 +83,11 @@ function createMainWindow() {
         mainWindow.webContents.openDevTools();
     }
     
-    mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
+    mainWindow.loadFile(path.join(__dirname, './renderer/html/index.html'));
     
     //Remove mainWindow from memory on close
     mainWindow.on('closed', () => (mainWindow = null));
     mainWindow.on('moved', () => {
-        console.log('moved');
         let coordo = mainWindow.getPosition();
         let userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
         userPreference.mainCoordinates = coordo;
@@ -93,9 +111,10 @@ function createSettingWindow() {
         resizable: false,
         frame: false,
         title: 'SETTING',
-        icon: path.join(__dirname, 'build-assets/setting.png'),
+        icon: path.join(__dirname, './build-assets/setting.png'),
         width: isDev? 1000: 600,
         height: 500,
+        show: true,
         webPreferences: {
             contextIsolation: true,
             nodeIntegration: true,
@@ -109,10 +128,9 @@ function createSettingWindow() {
 
     settingWindow.setMenuBarVisibility(null);
     settingWindow.setAlwaysOnTop(true);
-    settingWindow.loadFile(path.join(__dirname, './renderer/setting.html'));
+    settingWindow.loadFile(path.join(__dirname, './renderer/html/setting.html'));
     settingWindow.on('closed', () => (settingWindow = null));
     settingWindow.on('moved', () => {
-        console.log('moved');
         let coordo = settingWindow.getPosition();
         let userPreference = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'));
         userPreference["settingCoordinates"] = coordo;
@@ -123,8 +141,24 @@ function createSettingWindow() {
 
 
 // App is ready
-app.whenReady().then(() => {
+app.on('ready', () => {
     createMainWindow();
+    createSplashWindow(600, 400);
+        
+    mainWindow.webContents.on('did-finish-load', () => {
+        setTimeout(() => {
+            userClosed = false;
+            splashWindow.destroy();
+            mainWindow.show();
+        }, 1000);
+    });
+    
+    let userClosed = true;
+    splashWindow.on('closed', () => {
+        if(userClosed) {
+            app.quit();
+        };
+    });
 
     ipcMain.on('minimize-main-window', () => mainWindow.minimize());
 
