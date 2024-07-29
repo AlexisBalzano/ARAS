@@ -11,12 +11,12 @@
   "author": "Alexis Balzano",
   "license": "MIT",
   "dependencies": {
+    "electron": "^31.2.0",
     "@electron/remote": "^2.1.2",
     "electron-reload": "^2.0.0-alpha.1",
     "v8-compile-cache": "^2.4.0"
   },
   "devDependencies": {
-    "electron": "^31.2.0",
     "electron-builder": "^24.13.3"
   },
   "build": {
@@ -27,8 +27,8 @@
       ]
     },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
       "installerIcon": "./build-assets/icon.ico",
       "uninstallerIcon": "./build-assets/icon.ico",
       "installerHeaderIcon": "./build-assets/icon.ico",
@@ -38,6 +38,7 @@
     },
     "files": [
       "**/*",
+      "node_modules/**/*",
       "!./build-assets",
       "!config",
       "!Readme.txt"

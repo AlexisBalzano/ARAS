@@ -1,12 +1,11 @@
 require('v8-compile-cache');
 
 const path = require('path')
-const { BrowserWindow, Menu } = require('electron');
-const { ipcMain, dialog, app } = require('electron');
+const { BrowserWindow, ipcMain, dialog, app } = require('electron');
 const fs = require('fs');
 
 process.env.NODE_ENV = 'production';
-isPackaged = false;
+isPackaged = true;
 
 const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';

@@ -2,7 +2,6 @@ const os = require('os');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
-const Toastify = require('toastify-js');
 const { contextBridge, ipcRenderer, shell } = require('electron');
 
 contextBridge.exposeInMainWorld('dialog', {
@@ -29,10 +28,6 @@ contextBridge.exposeInMainWorld('path', {
 contextBridge.exposeInMainWorld('electron', {
     getAppPath: () => ipcRenderer.invoke('get-app-path'),
 });
-
-contextBridge.exposeInMainWorld('Toastify', {
-    toast: (options) => Toastify(options).showToast()
-})
 
 contextBridge.exposeInMainWorld('fs', {
     readFileSync: (...args) => fs.readFileSync(...args),

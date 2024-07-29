@@ -12,7 +12,7 @@ const resetButton = document.getElementById('resetButton');
 
 
 
-let isPackaged = false;
+let isPackaged = true;
 
 setPackageState(isPackaged);
 setPathPackagedState(isPackaged);
