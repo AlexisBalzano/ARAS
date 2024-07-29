@@ -27,6 +27,10 @@ Note: if you are adding unsopported ICAO, you will need to also add them using t
       the has4runway "FIR" is used to define airports equipped with 2 departures runways as well as 2 arrival one. Edit this list the same way as the others
       using a texteditor on Documents/ARAS/rwydata.
 
+      Unless specified in the update, you can keep your settings, to do so, proceed as follow:
+      Before reinstalling ARAS, make sure to save both rwydata.json & config.json in an other folder, 
+      after the reinstall, launch ARAS, it will create those 2 files back, you can replace them with your old config.
+
 
 ## Author
 Alexis Balzano

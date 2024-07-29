@@ -1,3 +1,7 @@
 {
-  "isFirstStartUp": true
+  "isFirstStartUp": true,
+  "mainCoordinates": [
+    -1125,
+    309
+  ]
 }

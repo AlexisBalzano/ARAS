@@ -11,12 +11,12 @@
   "author": "Alexis Balzano",
   "license": "MIT",
   "dependencies": {
-    "electron": "^31.2.0",
     "@electron/remote": "^2.1.2",
-    "electron-reload": "^2.0.0-alpha.1",
     "v8-compile-cache": "^2.4.0"
   },
   "devDependencies": {
+    "electron-reload": "^2.0.0-alpha.1",
+    "electron": "^31.3.0",
     "electron-builder": "^24.13.3"
   },
   "build": {
@@ -39,6 +39,7 @@
     "files": [
       "**/*",
       "node_modules/**/*",
+      "package.json",
       "!./build-assets",
       "!config",
       "!Readme.txt"

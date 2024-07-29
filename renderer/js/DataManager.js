@@ -2,8 +2,12 @@ const airportSelect = document.getElementById('airportSelect');
 
 
 export function populateAiportsList(FIR, paths) {
-    let airportsList = JSON.parse(fs.readFileSync(paths.configPath, 'utf8')).FIRairports[FIR];
-    airportSelect.value = airportsList.join(', ');
+    try {
+        let airportsList = JSON.parse(fs.readFileSync(paths.configPath, 'utf8')).FIRairports[FIR];
+        airportSelect.value = airportsList.join(', ');
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 let FIR = 'LFFF'

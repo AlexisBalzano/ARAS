@@ -5,7 +5,7 @@ const configIndicator = document.getElementById('config');
 const rwyFileButton = document.getElementById('rwyButton')
 
 
-let isPackaged = false;
+let isPackaged = true;
 
 export function setPathPackagedState(windowIsPackaged) {
     isPackaged = windowIsPackaged;
@@ -36,6 +36,7 @@ export async function pathAssignement(paths, tokenValid, createDefaultConfig) {
     paths.configPath = await assignPaths('config.json');
     let userPreferencePath = await assignUserPreferencePaths();
 
+
     if (!fs.existsSync(userPreferencePath)) {
         showNotif({type:'failure', message:'User preference not found, please reinstall app', duration:0});
         return;
@@ -51,48 +52,51 @@ export async function pathAssignement(paths, tokenValid, createDefaultConfig) {
     
     if (userPreference.isFirstStartUp) {
         showNotif({type:'processing', message:'First startup detected, creating default config...', duration:1500});
-        if (!fs.existsSync(path.join(paths.configPath, '..'))) {
-            fs.mkdir(path.join(paths.configPath, '..'), (err) => {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-            });
-        }
-        
-        createDefaultConfig(paths.configPath);
-        
-        let tempPath = await window.electron.getAppPath();
-        fs.copyFile( path.join(tempPath, '..', 'config', 'rwydata.json'), path.join(paths.rwyPath, '..', 'rwydata.json'), (err) => {
+        fs.mkdir(path.join(os.homedir(), 'Documents', 'ARAS'), {recursive: true}, (err) => {
             if (err) {
                 console.error(err);
                 return;
             }
         });
-        userPreference.isFirstStartUp = false;
-        fs.writeFileSync(userPreferencePath, JSON.stringify(userPreference, null, 2));
-    } else {
-        // Check if config.json is detected
-        if (fs.existsSync(paths.configPath)) {
-            configIndicator.style.color = 'var(--green)';
-            configIndicator.title = "config.json foudn";
-            tokenValid(paths.configPath);
-            if (JSON.parse(fs.readFileSync(paths.configPath, 'utf8')).outputPath !== null) {
-                rwyFileButton.style.backgroundColor = 'var(--green)';
-                rwyFileButton.innerText = 'Using previous file location';
+        
+        createDefaultConfig(paths.configPath);
+        
+        let tempPath = await window.electron.getAppPath();
+        fs.copyFile(path.join(tempPath, '..', 'config', 'rwydata.json'), path.join(os.homedir(), 'Documents', 'ARAS', 'rwydata.json'), (err) => {
+            if (err) {
+                console.error(err);
+                return;
             }
-        } else {
-            showNotif({type: 'failure', message: 'Config.json not found', duration: 1500});
-            createDefaultConfig(paths.configPath)
-            showNotif({type: 'success', message: 'Default Config.json created', duration: 1500});
-            
-        }
-        // Check if rwydata.json is detected
-        if (fs.existsSync(paths.rwyPath)) {
-            rwydataIndicator.style.color = 'var(--green)';
-            rwydataIndicator.title = "rwydata.json found";
-        } else {
-            showNotif({type: 'failure', message: 'rwydata.json not found', duration: 1500});
-        }
+            userPreference.isFirstStartUp = false;
+            fs.writeFileSync(userPreferencePath, JSON.stringify(userPreference, null, 2));
+            checkStatus(paths, tokenValid, createDefaultConfig);
+            return;
+        });
+    } else {
+        checkStatus(paths, tokenValid, createDefaultConfig);
     }
 };
+
+function checkStatus(paths, tokenValid, createDefaultConfig) {
+    if (fs.existsSync(paths.configPath)) {
+        configIndicator.style.color = 'var(--green)';
+        configIndicator.title = "config.json found";
+        tokenValid(paths.configPath);
+        if (JSON.parse(fs.readFileSync(paths.configPath, 'utf8')).outputPath !== null) {
+            rwyFileButton.style.backgroundColor = 'var(--green)';
+            rwyFileButton.innerText = 'Using previous file location';
+        }
+    } else {
+        showNotif({type: 'failure', message: 'Config.json not found', duration: 1500});
+        createDefaultConfig(paths.configPath)
+        showNotif({type: 'success', message: 'Default Config.json created', duration: 1500});
+        
+    }
+    // Check if rwydata.json is detected
+    if (fs.existsSync(paths.rwyPath)) {
+        rwydataIndicator.style.color = 'var(--green)';
+        rwydataIndicator.title = "rwydata.json found";
+    } else {
+        showNotif({type: 'failure', message: 'rwydata.json not found', duration: 1500});
+    }
+}

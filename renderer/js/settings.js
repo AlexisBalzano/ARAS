@@ -10,27 +10,33 @@ form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const formData = new FormData(form);
     data = Object.fromEntries(formData.entries());
+    let oaci = data.oaci.toUpperCase();
+    if(oaci.length != 4) {
+        showNotif({type: 'failure', message: 'OACI code must be 4 characters long', duration: 2000});
+        return;
+    }
     rwypath = await getRwyPath();
     let rwydata = JSON.parse(fs.readFileSync(rwypath, 'utf8'));
-    let oaci = data.oaci.toUpperCase();
-    createNewInput(data);
-
+    try {
+        createNewInput(data);
+    } catch (err) {
+        return;
+    }
     if(rwydata[oaci]){
         //TODO: get airport data to prefill the form and so that the user can modify the entry
         showNotif({type: 'failure', message: 'This airport is already in the database', duration: 2000});
         return;
     }
-
-
-
+    
+    
+    
     rwydata[oaci] = newInput;
-
+    
     //TODO: adapt code to accomodate 4 runways airports
     try {
         fs.writeFileSync(rwypath, JSON.stringify(rwydata, null, 2));
     } catch (err) {
         showNotif({type: 'failure', message: 'An error occured when saving to file', duration: 3000});
-        return;
     }
     showNotif({type: 'success', message: oaci + ' added to database', duration: 2000});
 });
@@ -54,22 +60,40 @@ function createNewInput(data){
         },
         "ICAO": oaci
     }
-
-    keysToCopyRunway1.forEach(key => {
-        if(key == 'heading1' || key == 'preferential1') {
-            newInput["runways"]["1"][key.slice(0,-1)] = parseInt(data[key]);
-        } else {
-            newInput["runways"]["1"][key.slice(0,-1)] = data[key];
-        }
-    })
-
-    keysToCopyRunway2.forEach(key => {
-        if(key == 'heading2' || key == 'preferential2') {
-            newInput["runways"]["2"][key.slice(0,-1)] = parseInt(data[key]);
-        } else {
-            newInput["runways"]["2"][key.slice(0,-1)] = data[key];
-        }
-    })
+    
+    try {
+        keysToCopyRunway1.forEach(key => {
+            let value = data[key];
+            if(value == '') {
+                showNotif({type: 'failure', message: 'All fields must be filled', duration: 2000});
+                throw new Error('');
+            }
+            if(key == 'heading1' || key == 'preferential1') {
+                newInput["runways"]["1"][key.slice(0,-1)] = parseInt(value);
+            } else {
+                newInput["runways"]["1"][key.slice(0,-1)] = value;
+            }
+        })
+    } catch (err) {
+        throw new Error('');
+    }
+    
+    try {
+        keysToCopyRunway2.forEach(key => {
+            let value = data[key];
+            if(value == '') {
+                showNotif({type: 'failure', message: 'All fields must be filled', duration: 2000});
+                return;
+            }
+            if(key == 'heading2' || key == 'preferential2') {
+                newInput["runways"]["2"][key.slice(0,-1)] = parseInt(value);
+            } else {
+                newInput["runways"]["2"][key.slice(0,-1)] = value;
+            }
+        })
+    } catch (err) {
+        throw new Error('');
+    }
 }
 
 document.getElementById('closebutton').addEventListener('click', () => {

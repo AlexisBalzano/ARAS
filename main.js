@@ -4,18 +4,18 @@ const path = require('path')
 const { BrowserWindow, ipcMain, dialog, app } = require('electron');
 const fs = require('fs');
 
-process.env.NODE_ENV = 'production';
+// process.env.NODE_ENV = 'production';
 isPackaged = true;
 
 const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
 
 
-require('electron-reload')(__dirname, {
-    // Optional: Use Electron's built-in hard reset to reload the whole app (not just the renderer process)
-    electron: require(`${__dirname}/node_modules/electron`),
-    ignored: /config|.*\.rwy/
-});
+// require('electron-reload')(__dirname, {
+//     // Optional: Use Electron's built-in hard reset to reload the whole app (not just the renderer process)
+//     electron: require(`${__dirname}/node_modules/electron`),
+//     ignored: /config|.*\.rwy/
+// });
 
 const appPath = app.getAppPath();
 
@@ -25,8 +25,17 @@ let settingCoordinates;
 
 function getCoordinates(key) {
     let defaultCoordinates = [450, 350];
-    userPreferencePath = path.join(appPath, 'config', 'userPreference.json');
-    let coordinates = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'))[key];
+    if(isPackaged) {
+        userPreferencePath = path.join(appPath, '..', 'config', 'userPreference.json');
+    } else {
+        userPreferencePath = path.join(appPath, 'config', 'userPreference.json');
+    }
+    let coordinates;
+    try {
+        coordinates = JSON.parse(fs.readFileSync(userPreferencePath, 'utf8'))[key];
+    } catch(err) {
+        console.log(err);
+    }
     if(coordinates === undefined) {
         coordinates = defaultCoordinates;
     }
@@ -67,7 +76,7 @@ function createMainWindow() {
         title: 'Automatic Runway Assisgnement System',
         width: isDev ? 1000 : 600,
         height: 400,
-        show: false,
+        show: true,
         icon: path.join(__dirname, './build-assets/icon.png'),
         webPreferences: {
             contextIsolation: true,
@@ -149,13 +158,13 @@ function showMainWindow() {
 // App is ready
 app.on('ready', () => {
     createMainWindow();
-    createSplashWindow(600, 400);
+    // createSplashWindow(600, 400);
     
-    splashWindow.on('closed', () => {
-        if(userClosed) {
-            app.quit();
-        };
-    });
+    // splashWindow.on('closed', () => {
+    //     if(userClosed) {
+    //         app.quit();
+    //     };
+    // });
 
     ipcMain.on('minimize-main-window', () => mainWindow.minimize());
 
@@ -202,15 +211,15 @@ ipcMain.on('send-rwypath', (event, path) => {
 });
 
 ipcMain.on('status-checked', () => {
-    if (isDev) {
-        if(mainWindow.webContents.isDevToolsOpened()) {
-            showMainWindow()
-        } else {
-            mainWindow.webContents.on('devtools-opened', () => {
-                showMainWindow();
-            });
-        }
-    } else {
-        showMainWindow();
-    }
+    // if (isDev) {
+    //     if(mainWindow.webContents.isDevToolsOpened()) {
+    //         showMainWindow()
+    //     } else {
+    //         mainWindow.webContents.on('devtools-opened', () => {
+    //             showMainWindow();
+    //         });
+    //     }
+    // } else {
+    //     showMainWindow();
+    // }
 });

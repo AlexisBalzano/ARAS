@@ -1,4 +1,4 @@
-let isPackaged = false;
+let isPackaged = true;
 
 export function setPackageState(windowisPackaged) {
     isPackaged = windowisPackaged;
