@@ -27,8 +27,8 @@
       ]
     },
     "nsis": {
-      "oneClick": true,
-      "allowToChangeInstallationDirectory": false,
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
       "installerIcon": "./build-assets/icon.ico",
       "uninstallerIcon": "./build-assets/icon.ico",
       "installerHeaderIcon": "./build-assets/icon.ico",
@@ -46,7 +46,8 @@
     ],
     "extraResources": [
       "./config/*",
-      "./ReadMe.txt"
+      "./ReadMe.txt",
+      "./build-assets/*"
     ],
     "icon": "./build-assets/icon.png"
   }
