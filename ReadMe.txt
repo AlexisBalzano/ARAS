@@ -19,6 +19,7 @@ When opening the program, the status info panel will show you the state of requi
 When red, the program could not locate the data, green indicating that it has.
 For token status, when entering a new token for the first time, it will be saved but not verified, and will appear yellow.
 After you've completed the first auto runway assignement successfully, the token will be verified and valid, the indication will then turn green.
+To automatically assign runway, the sofware must be run BEFORE opening Euroscope.
 The FIR Airports menu let you customise which airport are being assigned when clicking on a FIR auto-assign button (blue button).
 To modify the default list, select the FIR in the dropdown menu, then, the list of current auto-assigned airport will show in the textfield next to it.
 Modify this list with ICAO codes separated by comma. You can then add or remove airports according to your requirements.
