@@ -46,5 +46,7 @@ contextBridge.exposeInMainWorld('fs', {
 })
 
 contextBridge.exposeInMainWorld('ipcRenderer', {
-    send: (...args) => ipcRenderer.send(...args)
+    send: (...args) => ipcRenderer.send(...args),
+    on: (...args) => ipcRenderer.on(...args),
+    once: (...args) => ipcRenderer.once(...args),
 })

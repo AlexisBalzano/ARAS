@@ -17,6 +17,7 @@ let isPackaged = false;
 setPackageState(isPackaged);
 setPathPackagedState(isPackaged);
 
+
 let paths = {
     rwyPath: null,
     configPath: null
@@ -117,5 +118,13 @@ document.getElementById('minimize-window').addEventListener('click', () => {
 
 document.getElementById('close-window').addEventListener('click', () => {
     ipcRenderer.send('close-window');
+});
+
+ipcRenderer.on('request-rwypath', () => {
+    if (paths.rwyPath) {
+        ipcRenderer.send('send-rwypath', paths.rwyPath);
+    } else {
+        ipcRenderer.send('send-rwypath', 'NoPath');
+    }
 });
 

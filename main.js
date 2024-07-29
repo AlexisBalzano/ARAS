@@ -71,12 +71,22 @@ function createSettingWindow() {
 
     settingWindow = new BrowserWindow({
         resizable: false,
+        frame: false,
         title: 'SETTING',
         icon: path.join(__dirname, 'build-assets/setting.png'),
-        width: 600,
+        width: isDev? 1000: 600,
         height: 500,
+        webPreferences: {
+            contextIsolation: true,
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'preload.js')
+        }
     });
     
+    if (isDev) {
+        settingWindow.webContents.openDevTools();
+    }
+
     settingWindow.setMenuBarVisibility(null);
     settingWindow.setAlwaysOnTop(true);
     settingWindow.loadFile(path.join(__dirname, './renderer/setting.html'));
@@ -132,4 +142,12 @@ ipcMain.handle('showOpenDialog', async (event, options) => {
 
 ipcMain.handle('get-app-path', () => {
     return app.getAppPath();
+});
+
+ipcMain.on('request-rwypath', () => {
+    mainWindow.webContents.send('request-rwypath');
+});
+
+ipcMain.on('send-rwypath', (event, path) => {
+    settingWindow.webContents.send('send-rwypath', path);
 });

@@ -1,3 +1,24 @@
+/* Animations */
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-100%);
+    }
+}
+
+
 /* Global variable */
 :root {
     --font-family: arial, sans-serif;
@@ -21,6 +42,105 @@ html, body {
     overflow: hidden;
 }
 
+#title-bar {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    align-items: center;
+    background-color:  var(--background-color);
+    color: white;
+    -webkit-app-region: drag; /* Make title bar draggable */
+}
+
+#title-text{
+    font-family: var(--font-family);
+    font-size: 20px;
+}
+
+#title-icon {
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#window-controls {
+    display: flex;
+    -webkit-app-region: no-drag; /* Exclude window controls from draggable area */
+}
+
+#window-controls button {
+    background-color: var(--background-color);
+    border: none;
+    border-radius: 40%;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#minimize-window:hover {
+    background-color: #5f5f5f;
+}
+
+#close-window:hover {
+    background-color: var(--red);
+}
+
+.notifications {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 18px;
+    z-index: 999;
+    width: 90%;
+    top: 20px;
+    left: 5%;
+}
+
+.success {
+    background-color: rgba(0, 128, 0, 0.466);
+    color: white;
+    padding: 20px;
+    border: 2px solid rgb(0, 128, 0);
+    border-radius: 7px;
+    display: none;
+    margin-bottom: 5px;
+    backdrop-filter: blur(1px);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.1s ease-out;
+}
+
+.failure {
+    background-color: rgba(128, 0, 0, 0.466);
+    color: white;
+    padding: 20px;
+    border: 2px solid rgb(185, 25, 25);
+    border-radius: 7px;
+    display: none;
+    margin-bottom: 5px;
+    backdrop-filter: blur(1px);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.1s ease-out;
+}
+
+.processing {
+    background-color: rgba(207, 195, 21, 0.466);
+    color: white;
+    padding: 20px;
+    border: 2px solid rgb(207, 195, 21);
+    border-radius: 7px;
+    display: none;
+    margin-bottom: 5px;
+    backdrop-filter: blur(1px);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.1s ease-out;
+}
+
+.notifOut {
+    animation: slideOut 0.1s ease-in;
+}
+
 .container {
     display: block;
     position: relative;
@@ -32,7 +152,7 @@ html, body {
 
 
 #title {
-    margin-top: 8px;
+    margin-top: 0px;
     position: relative;
     font-family: var(--font-family);
     color: var(--white);

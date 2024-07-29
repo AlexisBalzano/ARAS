@@ -4,10 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings</title>
-    <script src="./js/settings.js" defer></script>
+    <script type="module" src="./js/settings.js"></script>
     <link rel="stylesheet" href="./css/settings.css">
 </head>
 <body>
+    <div id="title-bar">
+        <img id="title-icon" src="../build-assets/icon.png" alt="ico" width="25">
+        <div id="title-text"></div>
+        <div id="window-controls">
+            <button id="minimize-window">-</button>
+            <button id="close-window">X</button>
+        </div>
+    </div>
+
+    <div class="notifications">
+        <div class="success">
+            <h3>[SUCCESS]</h3>
+        </div>
+        <div class="failure">
+            <h3>[Failure]</h3>
+        </div>
+        <div class="processing">
+            <h3>[Processing]</h3>
+        </div>
+    </div>
+    
     <div class="container">
         <div class="titleDiv">
             <h2 id="title">Settings</h2>
@@ -21,38 +42,38 @@
                 <h3>Runway 1:</h3>
                 <div class="inputgroup">
                     <label for="heading">Heading: </label>
-                    <input id="heading" name="heading" type="number" max="360"/>
+                    <input id="heading" name="heading1" type="number" max="360"/>
                 </div>
                 <div class="inputgroup">
                     <label for="preferential">Preferential: </label>
-                    <input id="preferential" name="preferential" type="number" max="19"/>
+                    <input id="preferential" name="preferential1" type="number" max="19"/>
                 </div>
                 <div class="inputgroup">
                     <label for="departure">Departure: </label>
-                    <input id="departure" name="departure" type="text" maxlength="3"/>
+                    <input id="departure" name="departure1" type="text" maxlength="3"/>
                 </div>
                 <div class="inputgroup">
                     <label for="arrival">Arrival: </label>
-                    <input id="arrival" name="arrival" type="text" maxlength="3"/>
+                    <input id="arrival" name="arrival1" type="text" maxlength="3"/>
                 </div>
             </div>
             <div class="runwayinfo">
                 <h3>Runway 2:</h3>
                 <div class="inputgroup">
                     <label for="heading2">Heading: </label>
-                    <input id="heading2" name="heading" type="number" max="360"/>
+                    <input id="heading2" name="heading2" type="number" max="360"/>
                 </div>
                 <div class="inputgroup">
                     <label for="preferential2">Preferential: </label>
-                    <input id="preferential2" name="preferential" type="number" max="19"/>
+                    <input id="preferential2" name="preferential2" type="number" max="19"/>
                 </div>
                 <div class="inputgroup">
                     <label for="departure2">Departure: </label>
-                    <input id="departure2" name="departure" type="text" maxlength="3"/>
+                    <input id="departure2" name="departure2" type="text" maxlength="3"/>
                 </div>
                 <div class="inputgroup">
                     <label for="arrival2">Arrival: </label>
-                    <input id="arrival2" name="arrival" type="text" maxlength="3"/>
+                    <input id="arrival2" name="arrival2" type="text" maxlength="3"/>
                 </div>
             </div>
             <div class="inputgroup" id="has4runwaygroup">
@@ -62,5 +83,16 @@
             <input id="submitbutton" type="submit" value="Update Data"/>
         </form>
     </div>
+    <!-- <script>
+        const form = document.querySelector('.dataform');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            console.log('Form submitted');
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            console.log(data);
+        });
+    </script> -->
 </body>
 </html>
