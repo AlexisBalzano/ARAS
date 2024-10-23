@@ -31,8 +31,9 @@ export async function ARAS(FIR, paths, showNotif, clearNotif, createDefaultConfi
                     throw new Error('Request timed out');
                 }
                 return response.json()
-            })
-}
+            }
+        )
+    }
 
     function getRwyData(oaci){
         try {
@@ -53,14 +54,18 @@ export async function ARAS(FIR, paths, showNotif, clearNotif, createDefaultConfi
         let windspeed = 0
         const rwyData = getRwyData(oaci)
 
+        console.log("OACI: " + oaci) //FIXME: Remove
+
         if ('wind_direction' in metarJson && 'value' in metarJson['wind_direction']) {
             winddir = metarJson['wind_direction']['value'];
+            console.log("winddir: " + winddir) //FIXME: Remove
         } else {
             console.log('wind_direction value is not present');
             return;
         }
         if ('wind_speed' in metarJson && 'value' in metarJson['wind_speed']) {
-            windspeed = metarJson['wind_speed']['value'];
+            windspeed = parseInt(metarJson['wind_speed']['value'],10);
+            console.log("windspeed: " + windspeed) //FIXME: Remove
         } else {
             console.log('wind_speed value is not present');
             return;
@@ -69,45 +74,64 @@ export async function ARAS(FIR, paths, showNotif, clearNotif, createDefaultConfi
 
         if(has4rwy.includes(oaci))
             has4runways = true;
+            console.log("has4rwy: " + has4runways) //FIXME: Remove
 
         if(winddir === 'VRB') { //Assign the first runway (preferential)
+            console.log("VRB wind") //FIXME: Remove
+
             rwychoosen = "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['1']['arrival'] + ':0\n' + "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['1']['departure'] + ':1'
             if(has4runways)
                 rwychoosen += "\n" + "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['3']['arrival'] + ':0\n' + "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['3']['departure'] + ':1'
         } else {
             const rwyHeading = rwyData[oaci]['runways']['1']['heading'];
             const preferential = rwyData[oaci]['runways']['1']['preferential'];
-            if(winddir === rwyHeading){
+            if(parseInt(winddir,10) === rwyHeading){
+                console.log("Full headwind") //FIXME: Remove
                 HeadwindComponent = windspeed
                 headwind = true
-            } else if(winddir === rwyHeading + 180 || winddir === rwyHeading - 180){
+            } else if((parseInt(winddir,10) === rwyHeading + 180 ) || (parseInt(winddir,10) === rwyHeading - 180)){
+                console.log("Full tailwind") //FIXME: Remove
                 HeadwindComponent = windspeed
                 headwind = false
             } else {
-                let alpha = Math.cos(rwyHeading * Math.PI / 180) * Math.cos(winddir * Math.PI / 180) + Math.sin(rwyHeading * Math.PI / 180) * Math.sin(winddir * Math.PI / 180)
-                HeadwindComponent = Math.abs(windspeed * Math.sin(alpha))
-                if(alpha < 0)
-                    headwind = false
-                else
+                let angleA = parseInt(rwyHeading,10) * Math.PI / 180
+                console.log("Angle piste: " + angleA) //FIXME: Remove
+                let angleB = parseInt(winddir,10) * Math.PI / 180
+                console.log("Angle vent: " + angleB) //FIXME: Remove
+                let alpha = (angleA - angleB)
+                console.log("Angle diff: " + alpha) //FIXME: Remove
+                HeadwindComponent = windspeed * Math.cos(alpha)
+                console.log("Hedwind component: " + HeadwindComponent) //FIXME: Remove
+                if(HeadwindComponent > 0) {
+                    console.log("Headwind") //FIXME: Remove
                     headwind = true
+                }
+                else {
+                    console.log("Tailwind") //FIXME: Remove
+                    headwind = false
+                }
             }
 
             //Format the output
             if (headwind) {
+                console.log("Printing runway 1") //FIXME: Remove
                 rwychoosen = "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['1']['arrival'] + ':0\n' + "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['1']['departure'] + ':1\n'
                 if(has4runways)
                     rwychoosen += "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['3']['arrival'] + ':0\n' + "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['3']['departure'] + ':1\n'
 
             } else {
-                if( HeadwindComponent >= preferential)
+                if( Math.abs(HeadwindComponent) >= preferential) {
+                    console.log("Printing runway 2") //FIXME: Remove
                     rwychoosen = "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['2']['arrival'] + ':0\n' + "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['2']['departure'] + ':1\n'
                     if(has4runways)
                         rwychoosen += "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['4']['arrival'] + ':0\n' + "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['4']['departure'] + ':1\n'
-
-                else
+                }
+                else {
+                    console.log("Printing runway 1") //FIXME: Remove
                     rwychoosen = "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['1']['arrival'] + ':0\n' + "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['1']['departure'] + ':1\n'
                     if(has4runways)
                         rwychoosen += "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['3']['arrival'] + ':0\n' + "ACTIVE_RUNWAY:" + oaci + ":" + rwyData[oaci]['runways']['3']['departure'] + ':1\n'
+                }
             }
         }
 
