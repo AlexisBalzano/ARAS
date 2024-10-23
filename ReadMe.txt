@@ -1,4 +1,4 @@
-# Automatic Runway Assignement System v3.5.0
+# Automatic Runway Assignement System v3.6.0
 
 ## Introduction
 This software is used to assign automatically euroscope runways according to a database referencing preferential runway as well as using real-time weather data.
