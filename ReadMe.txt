@@ -35,6 +35,10 @@ Note: if you are adding unsopported ICAO, you will need to also add them using t
 
 ##Changelog
 
+v3.6.0 Optimised assignement code:
+      - Assignement error should now be resolved
+
+
 v3.5.0 Addition of Setting window + Minor UI rework
       - Addition of setting window making the user able to add/modify airports' runway data via the interface
       - Addition of a loading screen as well as an error screen if backend happens to fail (unlikely but if occurs, send me a message)
